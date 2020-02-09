@@ -1,5 +1,7 @@
 package ast.type;
 
-public interface Type{
+import ast.main.ASTNode;
+
+public interface Type extends ASTNode {
 
 }
