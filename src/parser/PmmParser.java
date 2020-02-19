@@ -17,7 +17,8 @@ public class PmmParser extends Parser {
 	protected static final PredictionContextCache _sharedContextCache =
 		new PredictionContextCache();
 	public static final int
-		INT_CONSTANT=1;
+		ONE_LINE_COMMENT=1, COMMENT=2, WHITESPACE=3, INT_CONSTANT=4, REAL_CONSTANT=5, 
+		CHAR_CONSTANT=6, ID=7;
 	public static final int
 		RULE_program = 0;
 	private static String[] makeRuleNames() {
@@ -34,7 +35,8 @@ public class PmmParser extends Parser {
 	private static final String[] _LITERAL_NAMES = makeLiteralNames();
 	private static String[] makeSymbolicNames() {
 		return new String[] {
-			null, "INT_CONSTANT"
+			null, "ONE_LINE_COMMENT", "COMMENT", "WHITESPACE", "INT_CONSTANT", "REAL_CONSTANT", 
+			"CHAR_CONSTANT", "ID"
 		};
 	}
 	private static final String[] _SYMBOLIC_NAMES = makeSymbolicNames();
@@ -89,7 +91,6 @@ public class PmmParser extends Parser {
 	}
 
 	public static class ProgramContext extends ParserRuleContext {
-		public TerminalNode INT_CONSTANT() { return getToken(PmmParser.INT_CONSTANT, 0); }
 		public ProgramContext(ParserRuleContext parent, int invokingState) {
 			super(parent, invokingState);
 		}
@@ -115,8 +116,6 @@ public class PmmParser extends Parser {
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(2);
-			match(INT_CONSTANT);
 			}
 		}
 		catch (RecognitionException re) {
@@ -131,8 +130,8 @@ public class PmmParser extends Parser {
 	}
 
 	public static final String _serializedATN =
-		"\3\u608b\ua72a\u8133\ub9ed\u417c\u3be7\u7786\u5964\3\3\7\4\2\t\2\3\2\3"+
-		"\2\3\2\2\2\3\2\2\2\2\5\2\4\3\2\2\2\4\5\7\3\2\2\5\3\3\2\2\2\2";
+		"\3\u608b\ua72a\u8133\ub9ed\u417c\u3be7\u7786\u5964\3\t\7\4\2\t\2\3\2\3"+
+		"\2\3\2\2\2\3\2\2\2\2\5\2\4\3\2\2\2\4\5\3\2\2\2\5\3\3\2\2\2\2";
 	public static final ATN _ATN =
 		new ATNDeserializer().deserialize(_serializedATN.toCharArray());
 	static {
