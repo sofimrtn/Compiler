@@ -104,7 +104,7 @@ REAL_CONSTANT: INT_CONSTANT? ('.') [0-9]+
                ;
 
 
-CHAR_CONSTANT:  '\'' [a-zA-Z] '\''
+CHAR_CONSTANT:  '\'' . '\''
                 |'\'' '.' '\''
                 | '\'' '\\' INT_CONSTANT INT_CONSTANT INT_CONSTANT'\''
                 | '\'' '\\n' '\''

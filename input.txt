@@ -14,7 +14,7 @@ def f(n: int,r: double): int {
   	return (int)c1;
 }
 
-def main(): {
+def main(): void {
 	# Record
   	pair: struct {
     	integer: int;
