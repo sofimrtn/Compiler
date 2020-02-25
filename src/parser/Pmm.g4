@@ -1,11 +1,11 @@
 grammar Pmm;	
 
-program: varDefinition funcDefinition
+program: varDefinition funcDefinition mainDefinition //main always goes at the end
        ;
 
 //-----------EXPRESSIONS---------//
 expression: '(' expression ')'
-        | expression '[' expression ']' // vector[1][2]
+        | expression '[' expression ']' // vector[1][2] expr[2] expr[expr]
         | expression '.' ID //always .ID eg p[].field or p.field[]. Field is an ID. and ID.ID is expr. and expr[] is expr.
         | '(' type ')' expression //casting
         | '-' expression
@@ -27,8 +27,8 @@ statement: (PRINT|INPUT) expression (',' expression)* ';'
         | RETURN expression ';' //return only goes followed by one expr.
         | funcInvocation ';' //invocations as an statement. Always with ; at the end.
         | expression '=' expression ';'
-        | 'while' expression ':' (statement |'{' statement+ '}')
-        | 'if' expression ':' statement+ ('else' statement+)*
+        | 'while' expression ':' (statement |'{' statement+ '}') //could break this down into parts if it gets too messy looking
+        | 'if' expression ':' statement+ ('else' statement+)* //same as while
         ;
 
 //-----------TYPE----------//
@@ -60,11 +60,12 @@ params: '(' ')' //could be empty -no parameters-
         | '(' oneVariable (',' oneVariable)* ')' //could have one or more parameters (one variable declarations).
         ;
 
+mainDefinition: DEF MAIN '(' ')' ':' 'void' '{' funcBody '}' ; //receives no parameters and always returns void.
 
 //-----------INVOCATION-----------//
-funcInvocation : ID '(' (expression (',' expression)*)? ')' ; //could be empty
+funcInvocation : ID '(' (expression (',' expression)*)? ')' ; //could be empty. ALSO break it down if it gets messy.
 
-//procInvocation ?????
+//procInvocation ????? -> works as statement.
 
 /*LEXER*/
 PRINT: 'print'
@@ -80,6 +81,9 @@ DEF: 'def'
     ;
 
 STRUCT: 'struct'
+    ;
+
+MAIN: 'main'
     ;
 
 ONE_LINE_COMMENT: '#' ~[\r\n\f]* -> skip
