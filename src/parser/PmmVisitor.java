@@ -16,4 +16,70 @@ public interface PmmVisitor<T> extends ParseTreeVisitor<T> {
 	 * @return the visitor result
 	 */
 	T visitProgram(PmmParser.ProgramContext ctx);
+	/**
+	 * Visit a parse tree produced by {@link PmmParser#expression}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitExpression(PmmParser.ExpressionContext ctx);
+	/**
+	 * Visit a parse tree produced by {@link PmmParser#statement}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitStatement(PmmParser.StatementContext ctx);
+	/**
+	 * Visit a parse tree produced by {@link PmmParser#type}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitType(PmmParser.TypeContext ctx);
+	/**
+	 * Visit a parse tree produced by {@link PmmParser#varDefinition}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitVarDefinition(PmmParser.VarDefinitionContext ctx);
+	/**
+	 * Visit a parse tree produced by {@link PmmParser#oneVariable}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitOneVariable(PmmParser.OneVariableContext ctx);
+	/**
+	 * Visit a parse tree produced by {@link PmmParser#multipleVariables}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitMultipleVariables(PmmParser.MultipleVariablesContext ctx);
+	/**
+	 * Visit a parse tree produced by {@link PmmParser#recordField}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitRecordField(PmmParser.RecordFieldContext ctx);
+	/**
+	 * Visit a parse tree produced by {@link PmmParser#funcDefinition}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitFuncDefinition(PmmParser.FuncDefinitionContext ctx);
+	/**
+	 * Visit a parse tree produced by {@link PmmParser#funcBody}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitFuncBody(PmmParser.FuncBodyContext ctx);
+	/**
+	 * Visit a parse tree produced by {@link PmmParser#params}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitParams(PmmParser.ParamsContext ctx);
+	/**
+	 * Visit a parse tree produced by {@link PmmParser#funcInvocation}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitFuncInvocation(PmmParser.FuncInvocationContext ctx);
 }

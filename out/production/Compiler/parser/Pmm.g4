@@ -1,7 +1,21 @@
 grammar Pmm;	
 
-program:
+program: expression
        ;
+
+expression: expression ('+'|'-') expression
+        | INT_CONSTANT
+        | CHAR_CONSTANT
+        ;
+
+
+
+
+
+
+
+
+/*LEXER*/
 
 ONE_LINE_COMMENT: '#' ~[\r\n\f]* -> skip
         ;
