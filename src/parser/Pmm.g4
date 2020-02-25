@@ -1,6 +1,6 @@
 grammar Pmm;	
 
-program: varDefinition funcDefinition mainDefinition //main always goes at the end
+program: (varDefinition';')* funcDefinition* mainDefinition //main always goes at the end and is mandatory
        ;
 
 //-----------EXPRESSIONS---------//
@@ -25,7 +25,7 @@ expression: '(' expression ')'
 //-----------STATEMENTS---------//
 statement: (PRINT|INPUT) expression (',' expression)* ';'
         | RETURN expression ';' //return only goes followed by one expr.
-        | funcInvocation ';' //invocations as an statement. Always with ; at the end.
+        | funcInvocation ';' //invocations as an statement. Always with ; at the end. This is a procedure.
         | expression '=' expression ';'
         | 'while' expression ':' (statement |'{' statement+ '}') //could break this down into parts if it gets too messy looking
         | 'if' expression ':' statement+ ('else' statement+)* //same as while
@@ -64,8 +64,6 @@ mainDefinition: DEF MAIN '(' ')' ':' 'void' '{' funcBody '}' ; //receives no par
 
 //-----------INVOCATION-----------//
 funcInvocation : ID '(' (expression (',' expression)*)? ')' ; //could be empty. ALSO break it down if it gets messy.
-
-//procInvocation ????? -> works as statement.
 
 /*LEXER*/
 PRINT: 'print'
