@@ -4,6 +4,7 @@ package parser;
     import ast.*;
     import ast.expression.*;
     import ast.type.*;
+    import ast.definition.*;
 
 import org.antlr.v4.runtime.tree.ParseTreeVisitor;
 
@@ -52,6 +53,12 @@ public interface PmmVisitor<T> extends ParseTreeVisitor<T> {
 	 */
 	T visitIfBody(PmmParser.IfBodyContext ctx);
 	/**
+	 * Visit a parse tree produced by {@link PmmParser#body}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitBody(PmmParser.BodyContext ctx);
+	/**
 	 * Visit a parse tree produced by {@link PmmParser#type}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
@@ -76,11 +83,11 @@ public interface PmmVisitor<T> extends ParseTreeVisitor<T> {
 	 */
 	T visitMultipleVariables(PmmParser.MultipleVariablesContext ctx);
 	/**
-	 * Visit a parse tree produced by {@link PmmParser#recordField}.
+	 * Visit a parse tree produced by {@link PmmParser#fields}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
 	 */
-	T visitRecordField(PmmParser.RecordFieldContext ctx);
+	T visitFields(PmmParser.FieldsContext ctx);
 	/**
 	 * Visit a parse tree produced by {@link PmmParser#funcDefinition}.
 	 * @param ctx the parse tree

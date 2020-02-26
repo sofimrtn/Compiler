@@ -4,6 +4,7 @@ package parser;
     import ast.*;
     import ast.expression.*;
     import ast.type.*;
+    import ast.definition.*;
 
 import org.antlr.v4.runtime.tree.ParseTreeListener;
 
@@ -73,6 +74,16 @@ public interface PmmListener extends ParseTreeListener {
 	 */
 	void exitIfBody(PmmParser.IfBodyContext ctx);
 	/**
+	 * Enter a parse tree produced by {@link PmmParser#body}.
+	 * @param ctx the parse tree
+	 */
+	void enterBody(PmmParser.BodyContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link PmmParser#body}.
+	 * @param ctx the parse tree
+	 */
+	void exitBody(PmmParser.BodyContext ctx);
+	/**
 	 * Enter a parse tree produced by {@link PmmParser#type}.
 	 * @param ctx the parse tree
 	 */
@@ -113,15 +124,15 @@ public interface PmmListener extends ParseTreeListener {
 	 */
 	void exitMultipleVariables(PmmParser.MultipleVariablesContext ctx);
 	/**
-	 * Enter a parse tree produced by {@link PmmParser#recordField}.
+	 * Enter a parse tree produced by {@link PmmParser#fields}.
 	 * @param ctx the parse tree
 	 */
-	void enterRecordField(PmmParser.RecordFieldContext ctx);
+	void enterFields(PmmParser.FieldsContext ctx);
 	/**
-	 * Exit a parse tree produced by {@link PmmParser#recordField}.
+	 * Exit a parse tree produced by {@link PmmParser#fields}.
 	 * @param ctx the parse tree
 	 */
-	void exitRecordField(PmmParser.RecordFieldContext ctx);
+	void exitFields(PmmParser.FieldsContext ctx);
 	/**
 	 * Enter a parse tree produced by {@link PmmParser#funcDefinition}.
 	 * @param ctx the parse tree

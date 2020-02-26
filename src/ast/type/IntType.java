@@ -2,7 +2,7 @@ package ast.type;
 
 public class IntType extends AbstractType{
 
-    private IntType() {
+    public IntType() {
         super(0,0);
     }
 

@@ -5,10 +5,12 @@ grammar Pmm;
     import ast.*;
     import ast.expression.*;
     import ast.type.*;
+    import ast.definition.*;
 }
 
-program returns [Program ast]: (varDefinition';')* funcDefinition* mainDefinition //main always goes at the end and is mandatory
-       ;
+program returns [Program ast]
+    : (varDefinition';')* funcDefinition* mainDefinition //main always goes at the end and is mandatory
+    ;
 
 //-----------EXPRESSIONS---------//
 expression returns [Expression ast]
@@ -21,10 +23,10 @@ expression returns [Expression ast]
         //casting
         | operator='-' expression {$ast = new UnaryMinus($operator.getLine(),$operator.getCharPositionInLine()+1,$expression.ast);}
         | operator='!' expression {$ast = new Negation($operator.getLine(),$operator.getCharPositionInLine()+1,$expression.ast);}
-        | e1=expression operator=('*'|'/'|'%') e2=expression {$ast = new Arithmetic($e1.start.getLine(), $e1.start.getgetCharPositionInLine()+1, $e1.ast, $operator.text, $e2.ast);}
-        | e1=expression operator=('+'|'-') e2=expression {$ast = new Arithmetic($e1.start.getLine(), $e1.start.getgetCharPositionInLine()+1, $e1.ast, $operator.text, $e2.ast);}
-        | e1=expression operator=('>'|'>='|'<'|'<='|'!='|'==') e2=expression {$ast = new Arithmetic($e1.start.getLine(), $e1.start.getgetCharPositionInLine()+1, $e1.ast, $operator.text, $e2.ast);}
-        | e1=expression operator=('&&'|'||') e2=expression {$ast = new Arithmetic($e1.start.getLine(), $e1.start.getgetCharPositionInLine()+1, $e1.ast, $operator.text, $e2.ast);}
+        | e1=expression operator=('*'|'/'|'%') e2=expression {$ast = new Arithmetic($e1.start.getLine(), $e1.start.getCharPositionInLine()+1, $e1.ast, $operator.text, $e2.ast);}
+        | e1=expression operator=('+'|'-') e2=expression {$ast = new Arithmetic($e1.start.getLine(), $e1.start.getCharPositionInLine()+1, $e1.ast, $operator.text, $e2.ast);}
+        | e1=expression operator=('>'|'>='|'<'|'<='|'!='|'==') e2=expression {$ast = new Arithmetic($e1.start.getLine(), $e1.start.getCharPositionInLine()+1, $e1.ast, $operator.text, $e2.ast);}
+        | e1=expression operator=('&&'|'||') e2=expression {$ast = new Arithmetic($e1.start.getLine(), $e1.start.getCharPositionInLine()+1, $e1.ast, $operator.text, $e2.ast);}
         | funcInvocation {} //invocation as an expression
         | INT_CONSTANT {$ast = new IntLiteral($INT_CONSTANT.getLine(), $INT_CONSTANT.getCharPositionInLine() + 1, LexerHelper.lexemeToInt($INT_CONSTANT.text));}
         | CHAR_CONSTANT {$ast = new CharLiteral($CHAR_CONSTANT.getLine(), $CHAR_CONSTANT.getCharPositionInLine() + 1, LexerHelper.lexemeToChar($CHAR_CONSTANT.text));}
@@ -32,7 +34,9 @@ expression returns [Expression ast]
         | ID {$ast = new Variable($ID.getLine(), $ID.getCharPositionInLine() + 1, $ID.text);}
         ;
 
-expressions: expression (',' expression)* ;
+expressions returns [List<Expression> ast = new ArrayList<Expression>()]
+    : expression {$ast.add($expression.ast);}(',' expression {$ast.add($expression.ast);})*
+    ;
 
 //-----------STATEMENTS---------//
 statement //devuelve una lista
@@ -52,24 +56,32 @@ ifBody: body ('else' body)* ;
 body: (statement |'{'statement'}' |'{' statement+ '}') ;
 //-----------TYPE----------//
 type returns [Type ast]
-    : 'int'
-    | 'char'
-    | 'double'
-    | 'void'
-    | ('['INT_CONSTANT']')+ type //array
-    | STRUCT '{' recordField+ '}' //record
+    : 'int' {$ast = new IntType();}
+    | 'char' {$ast = new CharType();}
+    | 'double' {$ast = new DoubleType();}
+    | 'void' {$ast = new VoidType();}
+    | (par='['INT_CONSTANT']')+ type {$ast = new Array($par.getLine(), $par.getCharPositionInLine()+1, LexerHelper.lexemeToInt($INT_CONSTANT.text), $type.ast);}
+    //array
+    | STRUCT '{' fields '}' {$ast = new Record($STRUCT.getLine(), $STRUCT.getCharPositionInLine()+1, $fields.ast);}
+    //record
     ;
 
 //-----------DEFINITIONS-----------//
-varDefinition: oneVariable
-            | multipleVariables
+varDefinition returns [List<VarDefinition> ast = new ArrayList<VarDefinition>()] //check if "fields" goes here too.
+            : oneVariable {$ast.add($oneVariable.ast);}
+            | multipleVariables {$ast.addAll($multipleVariables.ast);}
             ;
 
-oneVariable: ID ':' type ;
+oneVariable returns [VarDefinition ast]
+          : ID ':' type {$ast = new VarDefinition($ID.getLine(),$ID.getCharPositionInLine()+1, $type.ast, $ID.text);}
+          ;
 
-multipleVariables: ID (',' ID)+ ':' type ;
+multipleVariables returns [List<VarDefinition> ast = new ArrayList<VarDefinition>()] //as type comes last, it's assigned at the end.
+    : ID {$ast.add(new VarDefinition($ID.getLine(), $ID.getCharPositionInLine()+1, null, $ID.text));}(',' ID{$ast.add(new VarDefinition($ID.getLine(), $ID.getCharPositionInLine()+1, null, $ID.text));})+ ':' type {for(VarDefinition var : $ast){var.setType($type.ast);}}
+    ;
 
-recordField: varDefinition ';' ; //only used while defining records
+fields returns [List<RecordField> ast = new ArrayList<>()] //only used while defining records
+    : (varDefinition {for(VarDefinition var: $varDefinition.ast) {$ast.add(new RecordField(var.getLine(), var.getColumn(),var.getName(),var.getType()));}}';')+ ;
 
 funcDefinition: DEF ID  params ':' type? '{' funcBody '}';
 

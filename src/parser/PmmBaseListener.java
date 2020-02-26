@@ -4,6 +4,7 @@ package parser;
     import ast.*;
     import ast.expression.*;
     import ast.type.*;
+    import ast.definition.*;
 
 
 import org.antlr.v4.runtime.ParserRuleContext;
@@ -93,6 +94,18 @@ public class PmmBaseListener implements PmmListener {
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
+	@Override public void enterBody(PmmParser.BodyContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitBody(PmmParser.BodyContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
 	@Override public void enterType(PmmParser.TypeContext ctx) { }
 	/**
 	 * {@inheritDoc}
@@ -141,13 +154,13 @@ public class PmmBaseListener implements PmmListener {
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterRecordField(PmmParser.RecordFieldContext ctx) { }
+	@Override public void enterFields(PmmParser.FieldsContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitRecordField(PmmParser.RecordFieldContext ctx) { }
+	@Override public void exitFields(PmmParser.FieldsContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *

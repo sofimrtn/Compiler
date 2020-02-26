@@ -30,4 +30,8 @@ public class VarDefinition extends AbstractASTNode implements Definition, Statem
     public int getOffset(){
         return offset;
     }
+
+    public void setType(Type type){
+        this.type=type;
+    }
 }
