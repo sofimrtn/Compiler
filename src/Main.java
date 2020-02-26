@@ -2,6 +2,10 @@ import parser.*;
 
 import org.antlr.v4.runtime.*;
 
+import ast.Program;
+import introspector.model.IntrospectorModel;
+import introspector.view.IntrospectorTree;
+
 public class Main {
 	
 	public static void main(String... args) throws Exception {
@@ -16,7 +20,11 @@ public class Main {
 
 		// create a parser that feeds off the tokens buffer
 		CommonTokenStream tokens = new CommonTokenStream(lexer); 
-		PmmParser parser = new PmmParser(tokens);	
-		parser.program();		
+		PmmParser parser = new PmmParser(tokens);
+		Program ast = parser.program().ast;
+
+		// * The AST is shown
+		IntrospectorModel model=new IntrospectorModel("Program", ast);
+		new IntrospectorTree("Introspector", model);
 	}
 }

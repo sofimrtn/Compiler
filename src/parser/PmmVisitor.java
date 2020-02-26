@@ -1,5 +1,10 @@
 // Generated from C:/Users/msame/IdeaProjects/Compiler/src/parser\Pmm.g4 by ANTLR 4.8
 package parser;
+
+    import ast.*;
+    import ast.expression.*;
+    import ast.type.*;
+
 import org.antlr.v4.runtime.tree.ParseTreeVisitor;
 
 /**
@@ -23,11 +28,29 @@ public interface PmmVisitor<T> extends ParseTreeVisitor<T> {
 	 */
 	T visitExpression(PmmParser.ExpressionContext ctx);
 	/**
+	 * Visit a parse tree produced by {@link PmmParser#expressions}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitExpressions(PmmParser.ExpressionsContext ctx);
+	/**
 	 * Visit a parse tree produced by {@link PmmParser#statement}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
 	 */
 	T visitStatement(PmmParser.StatementContext ctx);
+	/**
+	 * Visit a parse tree produced by {@link PmmParser#whileBody}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitWhileBody(PmmParser.WhileBodyContext ctx);
+	/**
+	 * Visit a parse tree produced by {@link PmmParser#ifBody}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitIfBody(PmmParser.IfBodyContext ctx);
 	/**
 	 * Visit a parse tree produced by {@link PmmParser#type}.
 	 * @param ctx the parse tree

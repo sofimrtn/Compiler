@@ -1,38 +1,58 @@
 grammar Pmm;	
 
-program: (varDefinition';')* funcDefinition* mainDefinition //main always goes at the end and is mandatory
+@header
+{
+    import ast.*;
+    import ast.expression.*;
+    import ast.type.*;
+}
+
+program returns [Program ast]: (varDefinition';')* funcDefinition* mainDefinition //main always goes at the end and is mandatory
        ;
 
 //-----------EXPRESSIONS---------//
-expression: '(' expression ')'
-        | expression '[' expression ']' // vector[1][2] expr[2] expr[expr]
-        | expression '.' ID //always .ID eg p[].field or p.field[]. Field is an ID. and ID.ID is expr. and expr[] is expr.
-        | '(' type ')' expression //casting
-        | '-' expression
-        | '!' expression
-        | expression ('*'|'/'|'%') expression
-        | expression ('+'|'-') expression
-        | expression ('>'|'>='|'<'|'<='|'!='|'==') expression
-        | expression ('&&'|'||') expression
-        | expression ('=') expression
-        | funcInvocation //invocation as an expression
-        | INT_CONSTANT
-        | CHAR_CONSTANT
-        | REAL_CONSTANT
-        | ID
+expression returns [Expression ast]
+        : '(' expression ')' {$ast = $expression.ast;}
+        | e1=expression '[' e2=expression ']' {$ast = new ArrayAccess($e1.start.getLine(), $e1.start.getCharPositionInLine()+1, $e1.ast, $e2.ast);}
+        // vector[1][2] expr[2] expr[expr]
+        | expression '.' ID {$ast = new FieldAccess($expression.start.getLine(),$expression.start.getCharPositionInLine()+1, $expression.ast, $ID.text);}
+        //always .ID eg p[].field or p.field[]. Field is an ID. and ID.ID is expr. and expr[] is expr.
+        | par='(' type ')' expression {$ast = new Cast($par.getLine(), $par.getCharPositionInLine()+1, $type.ast, $expression.ast);}
+        //casting
+        | operator='-' expression {$ast = new UnaryMinus($operator.getLine(),$operator.getCharPositionInLine()+1,$expression.ast);}
+        | operator='!' expression {$ast = new Negation($operator.getLine(),$operator.getCharPositionInLine()+1,$expression.ast);}
+        | e1=expression operator=('*'|'/'|'%') e2=expression {$ast = new Arithmetic($e1.start.getLine(), $e1.start.getgetCharPositionInLine()+1, $e1.ast, $operator.text, $e2.ast);}
+        | e1=expression operator=('+'|'-') e2=expression {$ast = new Arithmetic($e1.start.getLine(), $e1.start.getgetCharPositionInLine()+1, $e1.ast, $operator.text, $e2.ast);}
+        | e1=expression operator=('>'|'>='|'<'|'<='|'!='|'==') e2=expression {$ast = new Arithmetic($e1.start.getLine(), $e1.start.getgetCharPositionInLine()+1, $e1.ast, $operator.text, $e2.ast);}
+        | e1=expression operator=('&&'|'||') e2=expression {$ast = new Arithmetic($e1.start.getLine(), $e1.start.getgetCharPositionInLine()+1, $e1.ast, $operator.text, $e2.ast);}
+        | funcInvocation {} //invocation as an expression
+        | INT_CONSTANT {$ast = new IntLiteral($INT_CONSTANT.getLine(), $INT_CONSTANT.getCharPositionInLine() + 1, LexerHelper.lexemeToInt($INT_CONSTANT.text));}
+        | CHAR_CONSTANT {$ast = new CharLiteral($CHAR_CONSTANT.getLine(), $CHAR_CONSTANT.getCharPositionInLine() + 1, LexerHelper.lexemeToChar($CHAR_CONSTANT.text));}
+        | REAL_CONSTANT {$ast = new RealLiteral($REAL_CONSTANT.getLine(),$REAL_CONSTANT.getCharPositionInLine() + 1, LexerHelper.lexemeToReal($REAL_CONSTANT.text));}
+        | ID {$ast = new Variable($ID.getLine(), $ID.getCharPositionInLine() + 1, $ID.text);}
         ;
+
+expressions: expression (',' expression)* ;
 
 //-----------STATEMENTS---------//
-statement: (PRINT|INPUT) expression (',' expression)* ';'
-        | RETURN expression ';' //return only goes followed by one expr.
+statement //devuelve una lista
+        : PRINT  expressions';'
+        | INPUT expressions';'
+        | RETURN expression';' //return only goes followed by one expr.
         | funcInvocation ';' //invocations as an statement. Always with ; at the end. This is a procedure.
         | expression '=' expression ';'
-        | 'while' expression ':' (statement |'{' statement+ '}') //could break this down into parts if it gets too messy looking
-        | 'if' expression ':' statement+ ('else' statement+)* //same as while
+        | 'while' expression ':' whileBody //could break this down into parts if it gets too messy looking
+        | 'if' expression ':' ifBody //same as while
         ;
 
+whileBody: body ;
+
+ifBody: body ('else' body)* ;
+
+body: (statement |'{'statement'}' |'{' statement+ '}') ;
 //-----------TYPE----------//
-type: 'int'
+type returns [Type ast]
+    : 'int'
     | 'char'
     | 'double'
     | 'void'
@@ -60,10 +80,10 @@ params: '(' ')' //could be empty -no parameters-
         | '(' oneVariable (',' oneVariable)* ')' //could have one or more parameters (one variable declarations).
         ;
 
-mainDefinition: DEF MAIN '(' ')' ':' 'void' '{' funcBody '}' ; //receives no parameters and always returns void.
+mainDefinition: DEF MAIN '(' ')' ':' '{' funcBody '}' ; //receives no parameters and always returns void.
 
 //-----------INVOCATION-----------//
-funcInvocation : ID '(' (expression (',' expression)*)? ')' ; //could be empty. ALSO break it down if it gets messy.
+funcInvocation : ID '(' expressions? ')' ; //could be empty. ALSO break it down if it gets messy.
 
 /*LEXER*/
 PRINT: 'print'

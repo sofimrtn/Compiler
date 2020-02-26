@@ -1,5 +1,10 @@
 // Generated from C:/Users/msame/IdeaProjects/Compiler/src/parser\Pmm.g4 by ANTLR 4.8
 package parser;
+
+    import ast.*;
+    import ast.expression.*;
+    import ast.type.*;
+
 import org.antlr.v4.runtime.tree.ParseTreeListener;
 
 /**
@@ -28,6 +33,16 @@ public interface PmmListener extends ParseTreeListener {
 	 */
 	void exitExpression(PmmParser.ExpressionContext ctx);
 	/**
+	 * Enter a parse tree produced by {@link PmmParser#expressions}.
+	 * @param ctx the parse tree
+	 */
+	void enterExpressions(PmmParser.ExpressionsContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link PmmParser#expressions}.
+	 * @param ctx the parse tree
+	 */
+	void exitExpressions(PmmParser.ExpressionsContext ctx);
+	/**
 	 * Enter a parse tree produced by {@link PmmParser#statement}.
 	 * @param ctx the parse tree
 	 */
@@ -37,6 +52,26 @@ public interface PmmListener extends ParseTreeListener {
 	 * @param ctx the parse tree
 	 */
 	void exitStatement(PmmParser.StatementContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link PmmParser#whileBody}.
+	 * @param ctx the parse tree
+	 */
+	void enterWhileBody(PmmParser.WhileBodyContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link PmmParser#whileBody}.
+	 * @param ctx the parse tree
+	 */
+	void exitWhileBody(PmmParser.WhileBodyContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link PmmParser#ifBody}.
+	 * @param ctx the parse tree
+	 */
+	void enterIfBody(PmmParser.IfBodyContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link PmmParser#ifBody}.
+	 * @param ctx the parse tree
+	 */
+	void exitIfBody(PmmParser.IfBodyContext ctx);
 	/**
 	 * Enter a parse tree produced by {@link PmmParser#type}.
 	 * @param ctx the parse tree

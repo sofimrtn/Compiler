@@ -1,10 +1,11 @@
-package ast.main;
+package ast;
 
 import ast.definition.Definition;
+import ast.main.AbstractASTNode;
 
 import java.util.List;
 
-public class Program extends AbstractASTNode{
+public class Program extends AbstractASTNode {
 
     private List<Definition> definitions;
 
