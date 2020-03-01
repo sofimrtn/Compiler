@@ -30,6 +30,9 @@ public class FuncDefinition extends AbstractASTNode implements Definition {
         return name;
     }
 
+    public void setStatements(List<Statement> list){
+        this.statements=statements;
+    }
     public List<Statement> getSentencias() {
         return statements;
     }

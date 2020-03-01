@@ -5,6 +5,7 @@ package parser;
     import ast.expression.*;
     import ast.type.*;
     import ast.definition.*;
+    import ast.statement.*;
 
 import org.antlr.v4.runtime.tree.ParseTreeListener;
 
@@ -73,6 +74,16 @@ public interface PmmListener extends ParseTreeListener {
 	 * @param ctx the parse tree
 	 */
 	void exitIfBody(PmmParser.IfBodyContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link PmmParser#elseBody}.
+	 * @param ctx the parse tree
+	 */
+	void enterElseBody(PmmParser.ElseBodyContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link PmmParser#elseBody}.
+	 * @param ctx the parse tree
+	 */
+	void exitElseBody(PmmParser.ElseBodyContext ctx);
 	/**
 	 * Enter a parse tree produced by {@link PmmParser#body}.
 	 * @param ctx the parse tree
@@ -183,4 +194,14 @@ public interface PmmListener extends ParseTreeListener {
 	 * @param ctx the parse tree
 	 */
 	void exitFuncInvocation(PmmParser.FuncInvocationContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link PmmParser#arguments}.
+	 * @param ctx the parse tree
+	 */
+	void enterArguments(PmmParser.ArgumentsContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link PmmParser#arguments}.
+	 * @param ctx the parse tree
+	 */
+	void exitArguments(PmmParser.ArgumentsContext ctx);
 }

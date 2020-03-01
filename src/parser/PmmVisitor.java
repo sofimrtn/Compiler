@@ -5,6 +5,7 @@ package parser;
     import ast.expression.*;
     import ast.type.*;
     import ast.definition.*;
+    import ast.statement.*;
 
 import org.antlr.v4.runtime.tree.ParseTreeVisitor;
 
@@ -52,6 +53,12 @@ public interface PmmVisitor<T> extends ParseTreeVisitor<T> {
 	 * @return the visitor result
 	 */
 	T visitIfBody(PmmParser.IfBodyContext ctx);
+	/**
+	 * Visit a parse tree produced by {@link PmmParser#elseBody}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitElseBody(PmmParser.ElseBodyContext ctx);
 	/**
 	 * Visit a parse tree produced by {@link PmmParser#body}.
 	 * @param ctx the parse tree
@@ -118,4 +125,10 @@ public interface PmmVisitor<T> extends ParseTreeVisitor<T> {
 	 * @return the visitor result
 	 */
 	T visitFuncInvocation(PmmParser.FuncInvocationContext ctx);
+	/**
+	 * Visit a parse tree produced by {@link PmmParser#arguments}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitArguments(PmmParser.ArgumentsContext ctx);
 }

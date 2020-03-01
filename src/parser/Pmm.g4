@@ -1,15 +1,17 @@
 grammar Pmm;	
 
 @header
+
 {
     import ast.*;
     import ast.expression.*;
     import ast.type.*;
     import ast.definition.*;
+    import ast.statement.*;
 }
 
 program returns [Program ast]
-    : (varDefinition';')* funcDefinition* mainDefinition //main always goes at the end and is mandatory TODO
+    : {List<Definition> definitions = new ArrayList<Definition>();}(varDefinition{definitions.addAll($varDefinition.ast);}';')* (funcDefinition{definitions.add($funcDefinition.ast);})* mainDefinition{definitions.add($mainDefinition.ast);$ast = new Program(0,0,definitions);}//main always goes at the end and is mandatory
     ;
 
 //-----------EXPRESSIONS---------//
@@ -27,7 +29,7 @@ expression returns [Expression ast]
         | e1=expression operator=('+'|'-') e2=expression {$ast = new Arithmetic($e1.start.getLine(), $e1.start.getCharPositionInLine()+1, $e1.ast, $operator.text, $e2.ast);}
         | e1=expression operator=('>'|'>='|'<'|'<='|'!='|'==') e2=expression {$ast = new Arithmetic($e1.start.getLine(), $e1.start.getCharPositionInLine()+1, $e1.ast, $operator.text, $e2.ast);}
         | e1=expression operator=('&&'|'||') e2=expression {$ast = new Arithmetic($e1.start.getLine(), $e1.start.getCharPositionInLine()+1, $e1.ast, $operator.text, $e2.ast);}
-        | funcInvocation {} //invocation as an expression TODO
+        | funcInvocation {$ast = $funcInvocation.ast;} //invocation as an expression
         | INT_CONSTANT {$ast = new IntLiteral($INT_CONSTANT.getLine(), $INT_CONSTANT.getCharPositionInLine() + 1, LexerHelper.lexemeToInt($INT_CONSTANT.text));}
         | CHAR_CONSTANT {$ast = new CharLiteral($CHAR_CONSTANT.getLine(), $CHAR_CONSTANT.getCharPositionInLine() + 1, LexerHelper.lexemeToChar($CHAR_CONSTANT.text));}
         | REAL_CONSTANT {$ast = new RealLiteral($REAL_CONSTANT.getLine(),$REAL_CONSTANT.getCharPositionInLine() + 1, LexerHelper.lexemeToReal($REAL_CONSTANT.text));}
@@ -40,13 +42,13 @@ expressions returns [List<Expression> ast = new ArrayList<Expression>()]
 
 //-----------STATEMENTS---------//
 statement returns [List<Statement> ast = new ArrayList<Statement>()]//devuelve una lista
-        : PRINT  expressions';' {$ast = new Print($PRINT.getLine(), $PRINT.getCharPositionInLine()+1, $expressions.ast);}
-        | INPUT expression ';' {$ast = new Input($INPUT.getLine(), $INPUT.getCharPositionInLine()+1, $expression.ast);}
-        | RETURN expression';' {$ast = new Return($RETURN.getLine(), $RETURN.getCharPositionInLine()+1, $expression.ast);}
-        | funcInvocation ';' //invocations as an statement. Always with ; at the end. This is a procedure. TODO
-        | e1=expression '=' e2=expression ';' {$ast = new Assignment($e1.start.getLine(), $e1.start.getCharPositionInLine()+1, $e1.ast, $e2.ast);}
-        | w='while' expression ':' whileBody {$ast = new While($w.getLine(), $w.getCharPositionInLine()+1, $expression.ast, $whileBody.ast);}
-        | i='if' expression ':' ifBody {$ast = new IfElse($i.getLine(), $i.getCharPositionInLine()+1, $expression.ast, $ifBody.ast, $ifBody.ast);}
+        : PRINT  expressions';' {$ast.add(new Print($PRINT.getLine(), $PRINT.getCharPositionInLine()+1, $expressions.ast));}
+        | INPUT expression ';' {$ast.add(new Input($INPUT.getLine(), $INPUT.getCharPositionInLine()+1, $expression.ast));}
+        | RETURN expression';' {$ast.add(new Return($RETURN.getLine(), $RETURN.getCharPositionInLine()+1, $expression.ast));}
+        | funcInvocation ';' {$ast.add((Statement)$funcInvocation.ast);} //invocations as an statement. Always with ; at the end. This is a procedure.
+        | e1=expression '=' e2=expression ';' {$ast.add(new Assignment($e1.start.getLine(), $e1.start.getCharPositionInLine()+1, $e1.ast, $e2.ast));}
+        | w='while' expression ':' whileBody {$ast.add(new While($w.getLine(), $w.getCharPositionInLine()+1, $expression.ast, $whileBody.ast));}
+        | i='if' expression ':' ifBody (elseBody)? {$ast.add(new IfElse($i.getLine(), $i.getCharPositionInLine()+1, $expression.ast, $ifBody.ast, $elseBody.ast));}
         ;
 
 whileBody returns [List<Statement> ast = new ArrayList<Statement>()]
@@ -54,11 +56,13 @@ whileBody returns [List<Statement> ast = new ArrayList<Statement>()]
     ;
 
 ifBody returns [List<Statement> ast = new ArrayList<Statement>()]
-    : body ('else' body)*  //ifStatements and else statements must be separated!!! TODO
+    : body {$ast.addAll($body.ast);}
     ;
-
+elseBody returns [List<Statement> ast = new ArrayList<Statement>()]
+    : 'else' body {$ast.addAll($body.ast);}
+    ;
 body returns [List<Statement> ast = new ArrayList<Statement>()]
-    : (statement |'{'statement'}' |'{' statement+ '}')  //TODO
+    : (s1=statement {$ast.addAll($s1.ast);} |'{'s2=statement {$ast.addAll($s2.ast);}'}' |'{' (s3=statement {$ast.addAll($s3.ast);})+ '}')
     ;
 //-----------TYPE----------//
 type returns [Type ast]
@@ -89,23 +93,33 @@ multipleVariables returns [List<VarDefinition> ast = new ArrayList<VarDefinition
 fields returns [List<RecordField> ast = new ArrayList<>()] //only used while defining records
     : (varDefinition {for(VarDefinition var: $varDefinition.ast) {$ast.add(new RecordField(var.getLine(), var.getColumn(),var.getName(),var.getType()));}}';')+ ;
 
-funcDefinition: DEF ID  params ':' type? '{' funcBody '}'; //TODO
+funcDefinition returns [FuncDefinition ast]
+    : DEF ID  params {$ast = new FuncDefinition($DEF.getLine(), $DEF.getCharPositionInLine()+1,new FuncType($ID.getLine(),$ID.getCharPositionInLine()+1,null,$params.ast),$ID.text,null);}':' (type {((FuncType)$ast.getType()).setType($type.ast);})? '{' funcBody {$ast.setStatements($funcBody.ast);} '}'
+    ;
 
-funcBody : (varDefinition';')* statement* ; //TODO
+funcBody returns [List<Statement> ast = new ArrayList<Statement>()]
+    : (varDefinition {$ast.addAll($varDefinition.ast);}';')* (statement {$ast.addAll($statement.ast);})*
+    ;
 
 
-params: '(' ')' //could be empty -no parameters- TODO
-        | '(' oneVariable (',' oneVariable)* ')' //could have one or more parameters (one variable declarations).
+params returns [List<VarDefinition> ast = new ArrayList<VarDefinition>()]: '(' ')' //could be empty -no parameters-
+        | '(' v1=oneVariable {$ast.add($v1.ast);} (',' v2=oneVariable {$ast.add($v2.ast);})* ')' //could have one or more parameters (one variable declarations).
         ;
 
-mainDefinition: DEF MAIN '(' ')' ':' '{' funcBody '}' ; //receives no parameters and always returns void. TODO
+mainDefinition returns [FuncDefinition ast]
+    : DEF MAIN '(' ')' ':' '{' funcBody '}' {$ast = new FuncDefinition($DEF.getLine(),$DEF.getCharPositionInLine()+1,new FuncType($DEF.getLine(), $DEF.getCharPositionInLine()+1,VoidType.getInstance(),null),$MAIN.text, $funcBody.ast);}
+    ; //receives no parameters and always returns void.
 
 //-----------INVOCATION-----------//
-funcInvocation returns [FuncInvocation ast] //REVISAR TODO
-    : ID '(' expressions? ')' {$ast = new FuncInvocation($ID.getLine(), $ID.getCharPositionInLine()+1, $expressions.ast, null);}
+funcInvocation returns [FuncInvocation ast]
+    : ID arguments {$ast = new FuncInvocation($ID.getLine(), $ID.getCharPositionInLine()+1, $arguments.ast, new Variable($ID.getLine(),$ID.getCharPositionInLine()+1, $ID.text));}
     ; //could be empty. ALSO break it down if it gets messy.
-
+arguments returns [List<Expression> ast = new ArrayList<Expression>()]
+    : '(' ')'
+    | '(' expressions {$ast.addAll($expressions.ast);} ')'
+    ;
 /*LEXER*/
+
 PRINT: 'print'
     ;
 

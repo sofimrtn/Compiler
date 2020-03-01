@@ -1,6 +1,6 @@
 package ast.statement;
 
-import java.beans.Expression;
+import ast.expression.*;
 import java.util.List;
 
 public class While extends AbstractStatement{

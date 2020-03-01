@@ -1,6 +1,6 @@
 package ast.statement;
 
-import java.beans.Expression;
+import ast.expression.*;
 
 public class Input extends AbstractStatement{
 

@@ -1,8 +1,10 @@
 package ast.expression;
 
+import ast.statement.Statement;
+
 import java.util.List;
 
-public class FuncInvocation extends AbstractExpression{
+public class FuncInvocation extends AbstractExpression implements Statement {
 
     private List<Expression> expressions;
     private Variable var;

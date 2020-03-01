@@ -5,6 +5,7 @@ package parser;
     import ast.expression.*;
     import ast.type.*;
     import ast.definition.*;
+    import ast.statement.*;
 
 
 import org.antlr.v4.runtime.ParserRuleContext;
@@ -89,6 +90,18 @@ public class PmmBaseListener implements PmmListener {
 	 * <p>The default implementation does nothing.</p>
 	 */
 	@Override public void exitIfBody(PmmParser.IfBodyContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void enterElseBody(PmmParser.ElseBodyContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitElseBody(PmmParser.ElseBodyContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
@@ -221,6 +234,18 @@ public class PmmBaseListener implements PmmListener {
 	 * <p>The default implementation does nothing.</p>
 	 */
 	@Override public void exitFuncInvocation(PmmParser.FuncInvocationContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void enterArguments(PmmParser.ArgumentsContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitArguments(PmmParser.ArgumentsContext ctx) { }
 
 	/**
 	 * {@inheritDoc}
