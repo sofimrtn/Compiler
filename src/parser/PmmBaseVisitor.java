@@ -66,7 +66,7 @@ public class PmmBaseVisitor<T> extends AbstractParseTreeVisitor<T> implements Pm
 	 * <p>The default implementation returns the result of calling
 	 * {@link #visitChildren} on {@code ctx}.</p>
 	 */
-	@Override public T visitElseBody(PmmParser.ElseBodyContext ctx) { return visitChildren(ctx); }
+	@Override public T visitElseSt(PmmParser.ElseStContext ctx) { return visitChildren(ctx); }
 	/**
 	 * {@inheritDoc}
 	 *
