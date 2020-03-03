@@ -42,7 +42,7 @@ expressions returns [List<Expression> ast = new ArrayList<Expression>()]
 
 //-----------STATEMENTS---------//
 statement returns [List<Statement> ast = new ArrayList<Statement>()]//devuelve una lista
- : PRINT  expressions';' {$ast.add(new Print($PRINT.getLine(), $PRINT.getCharPositionInLine()+1, $expressions.ast));}
+ : PRINT  expressions';' {for(Expression exp : $expressions.ast) {$ast.add(new Print($PRINT.getLine(), $PRINT.getCharPositionInLine()+1, exp));}}
  | INPUT expression ';' {$ast.add(new Input($INPUT.getLine(), $INPUT.getCharPositionInLine()+1, $expression.ast));}
  | RETURN expression';' {$ast.add(new Return($RETURN.getLine(), $RETURN.getCharPositionInLine()+1, $expression.ast));}
  | funcInvocation ';' {$ast.add((Statement)$funcInvocation.ast);} //invocations as an statement. Always with ; at the end. This is a procedure.

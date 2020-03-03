@@ -666,7 +666,7 @@ public class PmmParser extends Parser {
 				((StatementContext)_localctx).expressions = expressions();
 				setState(141);
 				match(T__0);
-				_localctx.ast.add(new Print(((StatementContext)_localctx).PRINT.getLine(), ((StatementContext)_localctx).PRINT.getCharPositionInLine()+1, ((StatementContext)_localctx).expressions.ast));
+				for(Expression exp : ((StatementContext)_localctx).expressions.ast) {_localctx.ast.add(new Print(((StatementContext)_localctx).PRINT.getLine(), ((StatementContext)_localctx).PRINT.getCharPositionInLine()+1, exp));}
 				}
 				break;
 			case 2:
