@@ -11,7 +11,7 @@ grammar Pmm;
 }
 
 program returns [Program ast]
- : {List<Definition> definitions = new ArrayList<Definition>();}(varDefinition{definitions.addAll($varDefinition.ast);}';')* (funcDefinition{definitions.add($funcDefinition.ast);})* mainDefinition{definitions.add($mainDefinition.ast);$ast = new Program(0,0,definitions);} EOF//main always goes at the end and is mandatory
+ : {List<Definition> definitions = new ArrayList<Definition>();}(varDefinition{definitions.addAll($varDefinition.ast);}';'| funcDefinition{definitions.add($funcDefinition.ast);})*  mainDefinition{definitions.add($mainDefinition.ast);$ast = new Program(0,0,definitions);} EOF//main always goes at the end and is mandatory
  ;
 
 //-----------EXPRESSIONS---------//
@@ -110,7 +110,7 @@ params returns [List<VarDefinition> ast = new ArrayList<VarDefinition>()]
  ;
 
 mainDefinition returns [FuncDefinition ast]
- : DEF MAIN '(' ')' ':' '{' funcBody '}' {$ast = new FuncDefinition($DEF.getLine(),$DEF.getCharPositionInLine()+1,new FuncType($DEF.getLine(), $DEF.getCharPositionInLine()+1,VoidType.getInstance(),new ArrayList<VarDefinition>()),$MAIN.text, $funcBody.ast);}
+ : DEF MAIN '(' ')' ':' ('void')? '{' funcBody '}' {$ast = new FuncDefinition($DEF.getLine(),$DEF.getCharPositionInLine()+1,new FuncType($DEF.getLine(), $DEF.getCharPositionInLine()+1,VoidType.getInstance(),new ArrayList<VarDefinition>()),$MAIN.text, $funcBody.ast);}
  ; //receives no parameters and always returns void.
 
 //-----------INVOCATION-----------//
