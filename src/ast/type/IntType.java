@@ -7,7 +7,7 @@ public class IntType extends AbstractType{
     }
 
     //Singleton pattern
-    private static IntType instance = new IntType();
+    private static IntType instance;
 
     public static IntType getInstance(){
         if (instance == null)
