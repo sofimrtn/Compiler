@@ -10,6 +10,8 @@ public class IntType extends AbstractType{
     private static IntType instance = new IntType();
 
     public static IntType getInstance(){
+        if (instance == null)
+            instance = new IntType();
         return instance;
     }
 

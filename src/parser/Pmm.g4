@@ -70,7 +70,7 @@ type returns [Type ast]
  | 'char' {$ast = new CharType();}
  | 'double' {$ast = new DoubleType();}
  | 'void' {$ast = new VoidType();}
- | (par='['INT_CONSTANT']')+ type {$ast = new Array($par.getLine(), $par.getCharPositionInLine()+1, LexerHelper.lexemeToInt($INT_CONSTANT.text), $type.ast);}
+ | (par='['size=INT_CONSTANT']') type {$ast = new Array($par.getLine(), $par.getCharPositionInLine()+1, LexerHelper.lexemeToInt($size.text), $type.ast);}
  //array
  | STRUCT '{' fields '}' {$ast = new Record($STRUCT.getLine(), $STRUCT.getCharPositionInLine()+1, $fields.ast);}
  //record
