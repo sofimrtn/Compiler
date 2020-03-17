@@ -88,7 +88,7 @@ oneVariable returns [VarDefinition ast]
  ;
 
 multipleVariables returns [List<VarDefinition> ast = new ArrayList<VarDefinition>()] //as type comes last, it's assigned at the end.
- : ID {$ast.add(new VarDefinition($ID.getLine(), $ID.getCharPositionInLine()+1, null, $ID.text));}(',' ID{$ast.add(new VarDefinition($ID.getLine(), $ID.getCharPositionInLine()+1, null, $ID.text));})+ ':' type {for(VarDefinition var : $ast){var.setType($type.ast);}}
+ : id1=ID {$ast.add(new VarDefinition($id1.getLine(), $id1.getCharPositionInLine()+1, null, $id1.text));}(','id2=ID{if($ast.contains(new VarDefinition($id2.getLine(), $id2.getCharPositionInLine()+1, null, $id2.text))){new ErrorType($id2.getLine(), $id2.getCharPositionInLine()+1, "Duplicate variable error: " + $id2.text);}else{$ast.add(new VarDefinition($id2.getLine(), $id2.getCharPositionInLine()+1, null, $id2.text));}})+ ':' type {for(VarDefinition var : $ast){var.setType($type.ast);}}
  ;
 
 fields returns [List<RecordField> ast = new ArrayList<>()] //only used while defining records

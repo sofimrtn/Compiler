@@ -1,5 +1,7 @@
 package ast.expression;
 
+import visitor.Visitor;
+
 public class LogicOperator extends AbstractExpression{
 
     private Expression right;
@@ -35,5 +37,10 @@ public class LogicOperator extends AbstractExpression{
 
     public void setOperator(String operator) {
         this.operator = operator;
+    }
+
+    @Override
+    public <T, P> T accept(Visitor<T, P> visitor, P param) {
+        return visitor.visit(this,param);
     }
 }

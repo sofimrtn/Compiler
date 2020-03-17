@@ -1254,14 +1254,15 @@ public class PmmParser extends Parser {
 
 	public static class MultipleVariablesContext extends ParserRuleContext {
 		public List<VarDefinition> ast = new ArrayList<VarDefinition>();
-		public Token ID;
+		public Token id1;
+		public Token id2;
 		public TypeContext type;
+		public TypeContext type() {
+			return getRuleContext(TypeContext.class,0);
+		}
 		public List<TerminalNode> ID() { return getTokens(PmmParser.ID); }
 		public TerminalNode ID(int i) {
 			return getToken(PmmParser.ID, i);
-		}
-		public TypeContext type() {
-			return getRuleContext(TypeContext.class,0);
 		}
 		public MultipleVariablesContext(ParserRuleContext parent, int invokingState) {
 			super(parent, invokingState);
@@ -1290,8 +1291,8 @@ public class PmmParser extends Parser {
 			enterOuterAlt(_localctx, 1);
 			{
 			setState(246);
-			((MultipleVariablesContext)_localctx).ID = match(ID);
-			_localctx.ast.add(new VarDefinition(((MultipleVariablesContext)_localctx).ID.getLine(), ((MultipleVariablesContext)_localctx).ID.getCharPositionInLine()+1, null, (((MultipleVariablesContext)_localctx).ID!=null?((MultipleVariablesContext)_localctx).ID.getText():null)));
+			((MultipleVariablesContext)_localctx).id1 = match(ID);
+			_localctx.ast.add(new VarDefinition(((MultipleVariablesContext)_localctx).id1.getLine(), ((MultipleVariablesContext)_localctx).id1.getCharPositionInLine()+1, null, (((MultipleVariablesContext)_localctx).id1!=null?((MultipleVariablesContext)_localctx).id1.getText():null)));
 			setState(251); 
 			_errHandler.sync(this);
 			_la = _input.LA(1);
@@ -1301,8 +1302,8 @@ public class PmmParser extends Parser {
 				setState(248);
 				match(T__20);
 				setState(249);
-				((MultipleVariablesContext)_localctx).ID = match(ID);
-				_localctx.ast.add(new VarDefinition(((MultipleVariablesContext)_localctx).ID.getLine(), ((MultipleVariablesContext)_localctx).ID.getCharPositionInLine()+1, null, (((MultipleVariablesContext)_localctx).ID!=null?((MultipleVariablesContext)_localctx).ID.getText():null)));
+				((MultipleVariablesContext)_localctx).id2 = match(ID);
+				if(_localctx.ast.contains(new VarDefinition(((MultipleVariablesContext)_localctx).id2.getLine(), ((MultipleVariablesContext)_localctx).id2.getCharPositionInLine()+1, null, (((MultipleVariablesContext)_localctx).id2!=null?((MultipleVariablesContext)_localctx).id2.getText():null)))){new ErrorType(((MultipleVariablesContext)_localctx).id2.getLine(), ((MultipleVariablesContext)_localctx).id2.getCharPositionInLine()+1, "Duplicate variable error: " + (((MultipleVariablesContext)_localctx).id2!=null?((MultipleVariablesContext)_localctx).id2.getText():null));}else{_localctx.ast.add(new VarDefinition(((MultipleVariablesContext)_localctx).id2.getLine(), ((MultipleVariablesContext)_localctx).id2.getCharPositionInLine()+1, null, (((MultipleVariablesContext)_localctx).id2!=null?((MultipleVariablesContext)_localctx).id2.getText():null)));}
 				}
 				}
 				setState(253); 
