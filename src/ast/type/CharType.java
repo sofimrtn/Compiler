@@ -1,5 +1,7 @@
 package ast.type;
 
+import visitor.Visitor;
+
 public class CharType extends AbstractType {
 
     public CharType() {
@@ -12,4 +14,5 @@ public class CharType extends AbstractType {
     public static CharType getInstance(){
         return instance;
     }
+
 }

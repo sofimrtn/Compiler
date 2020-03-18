@@ -7,6 +7,8 @@ public class Assignment extends AbstractStatement{
     private Expression left;
     private Expression right;
 
+    private boolean lValue = false;
+
     public Assignment(int line, int column, Expression left, Expression right) {
         super(line, column);
         this.left=left;
@@ -27,5 +29,13 @@ public class Assignment extends AbstractStatement{
 
     public void setRight(Expression right) {
         this.right = right;
+    }
+
+    public boolean getLValue() {
+        return lValue;
+    }
+
+    public void setLValue(boolean lValue) {
+        this.lValue = lValue;
     }
 }

@@ -1,5 +1,7 @@
 package ast.type;
 
+import visitor.Visitor;
+
 public class Array extends AbstractType {
 
     private int size;

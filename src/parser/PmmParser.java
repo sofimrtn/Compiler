@@ -1303,7 +1303,7 @@ public class PmmParser extends Parser {
 				match(T__20);
 				setState(249);
 				((MultipleVariablesContext)_localctx).id2 = match(ID);
-				if(_localctx.ast.contains(new VarDefinition(((MultipleVariablesContext)_localctx).id2.getLine(), ((MultipleVariablesContext)_localctx).id2.getCharPositionInLine()+1, null, (((MultipleVariablesContext)_localctx).id2!=null?((MultipleVariablesContext)_localctx).id2.getText():null)))){new ErrorType(((MultipleVariablesContext)_localctx).id2.getLine(), ((MultipleVariablesContext)_localctx).id2.getCharPositionInLine()+1, "Duplicate variable error: " + (((MultipleVariablesContext)_localctx).id2!=null?((MultipleVariablesContext)_localctx).id2.getText():null));}else{_localctx.ast.add(new VarDefinition(((MultipleVariablesContext)_localctx).id2.getLine(), ((MultipleVariablesContext)_localctx).id2.getCharPositionInLine()+1, null, (((MultipleVariablesContext)_localctx).id2!=null?((MultipleVariablesContext)_localctx).id2.getText():null)));}
+				if((((MultipleVariablesContext)_localctx).id1!=null?((MultipleVariablesContext)_localctx).id1.getText():null).equals((((MultipleVariablesContext)_localctx).id2!=null?((MultipleVariablesContext)_localctx).id2.getText():null))){new ErrorType(((MultipleVariablesContext)_localctx).id2.getLine(), ((MultipleVariablesContext)_localctx).id2.getCharPositionInLine()+1, "Duplicate variable error: " + (((MultipleVariablesContext)_localctx).id2!=null?((MultipleVariablesContext)_localctx).id2.getText():null));}else{_localctx.ast.add(new VarDefinition(((MultipleVariablesContext)_localctx).id2.getLine(), ((MultipleVariablesContext)_localctx).id2.getCharPositionInLine()+1, null, (((MultipleVariablesContext)_localctx).id2!=null?((MultipleVariablesContext)_localctx).id2.getText():null)));}
 				}
 				}
 				setState(253); 
@@ -1330,7 +1330,7 @@ public class PmmParser extends Parser {
 
 	public static class FieldsContext extends ParserRuleContext {
 		public List<RecordField> ast = new ArrayList<>();
-		public VarDefinitionContext varDefinition;
+		public VarDefinitionContext varDef;
 		public List<VarDefinitionContext> varDefinition() {
 			return getRuleContexts(VarDefinitionContext.class);
 		}
@@ -1370,8 +1370,8 @@ public class PmmParser extends Parser {
 				{
 				{
 				setState(259);
-				((FieldsContext)_localctx).varDefinition = varDefinition();
-				for(VarDefinition var: ((FieldsContext)_localctx).varDefinition.ast) {_localctx.ast.add(new RecordField(var.getLine(), var.getColumn(),var.getName(),var.getType()));}
+				((FieldsContext)_localctx).varDef = varDefinition();
+				for(VarDefinition def : ((FieldsContext)_localctx).varDef.ast) {if(_localctx.ast.contains(new RecordField(def.getLine(), def.getColumn(), def.getName(), def.getType()))) {new ErrorType(def.getLine(), def.getColumn(), "Duplicate field error: " + def.getName());} else {_localctx.ast.add(new RecordField(def.getLine(), def.getColumn(), def.getName(), def.getType()));}}
 				setState(261);
 				match(T__0);
 				}

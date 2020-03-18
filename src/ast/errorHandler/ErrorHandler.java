@@ -9,7 +9,7 @@ import java.util.List;
 public class ErrorHandler {
 
     //singleton
-    private static ErrorHandler instance;
+    private static ErrorHandler instance = new ErrorHandler();
 
     private List<ErrorType> errors = new ArrayList<ErrorType>();
 

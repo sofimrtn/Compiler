@@ -1,6 +1,8 @@
-package visitor.impl;
+package visitor.semantic;
 
 import ast.expression.*;
+import ast.statement.Assignment;
+import ast.type.ErrorType;
 import visitor.AbstractVisitor;
 
 public class VisitorLValue extends AbstractVisitor<Object, Object> {
@@ -98,6 +100,17 @@ public class VisitorLValue extends AbstractVisitor<Object, Object> {
     @Override
     public Object visit(Variable variable, Object param) {
         variable.setLValue(true);
+        return null;
+    }
+
+    @Override
+    public Object visit(Assignment assignment, Object o) {
+        assignment.getLeft().accept(this, o);
+        assignment.getRight().accept(this, o);
+        if(!assignment.getLeft().getLValue()) {
+            new ErrorType(assignment, "Se esperaba LValue");
+        }
+        assignment.setLValue(false);
         return null;
     }
 }

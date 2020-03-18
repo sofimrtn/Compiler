@@ -1,6 +1,12 @@
 package visitor;
 
+import ast.definition.FuncDefinition;
+import ast.definition.VarDefinition;
 import ast.expression.*;
+import ast.statement.Assignment;
+import ast.type.Array;
+import ast.type.CharType;
+import ast.type.ErrorType;
 
 public interface Visitor<T,P> {
 
@@ -18,4 +24,10 @@ public interface Visitor<T,P> {
     T visit (RealLiteral realLiteral, P param);
     T visit (UnaryMinus unaryMinus, P param);
     T visit (Variable variable, P param);
+    //statements
+    T visit (Assignment assignment, P param);
+    //definitions
+    T visit (VarDefinition varDefinition, P param);
+    T visit (FuncDefinition funcDefinition, P param);
+
 }

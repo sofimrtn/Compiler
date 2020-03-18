@@ -1,0 +1,10 @@
+"""
+	Errors Handler
+	DLP 19/20
+"""
+i, i:int; # Error: duplicated variable
+
+# Main program
+def main(): {
+	i = 0;
+}

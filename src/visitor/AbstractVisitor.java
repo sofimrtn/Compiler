@@ -1,6 +1,10 @@
 package visitor;
 
+import ast.definition.FuncDefinition;
+import ast.definition.VarDefinition;
 import ast.expression.*;
+import ast.statement.Assignment;
+import ast.statement.Statement;
 
 public class AbstractVisitor<T, P> implements Visitor<T, P> {
 
@@ -110,6 +114,32 @@ public class AbstractVisitor<T, P> implements Visitor<T, P> {
 
     @Override
     public T visit(Variable variable, P param) {
+        return null;
+    }
+
+    @Override
+    public T visit(Assignment assignment, P param) {
+        if(assignment.getLeft()!=null){
+            assignment.accept(this,param);
+        }
+        if(assignment.getRight()!=null){
+            assignment.accept(this,param);
+        }
+        return null;
+    }
+
+    @Override
+    public T visit(VarDefinition varDefinition, P param) {
+        varDefinition.accept(this,param);
+        return null;
+    }
+
+    @Override
+    public T visit(FuncDefinition funcDefinition, P param) {
+        for(Statement s : funcDefinition.getStatements()){
+            s.accept(this,param);
+        }
+        funcDefinition.accept(this,param);
         return null;
     }
 }

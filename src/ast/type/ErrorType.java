@@ -3,6 +3,7 @@ package ast.type;
 import ast.errorHandler.ErrorHandler;
 import ast.main.ASTNode;
 import ast.type.AbstractType;
+import visitor.Visitor;
 
 public class ErrorType extends AbstractType {
 
