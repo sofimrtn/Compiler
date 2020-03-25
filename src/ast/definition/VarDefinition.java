@@ -52,4 +52,22 @@ public class VarDefinition extends AbstractASTNode implements Definition, Statem
     public <T, P> T accept(Visitor<T, P> visitor, P param) {
         return visitor.visit(this,param);
     }
+
+    @Override
+    public String toString() {
+        return "VarDefinition{" +
+                "name='" + name + '\'' +
+                '}';
+    }
+
+    @Override
+    public boolean equals( Object other ) {
+        if (other == null)
+            return false;
+        if (!( other instanceof VarDefinition ))
+            return false;
+        VarDefinition variable = (VarDefinition) other;
+        return ( this.getName().equals( variable.getName() )
+                && this.getScope() == variable.getScope() );
+    }
 }

@@ -596,8 +596,8 @@ public class PmmParser extends Parser {
 		public Token PRINT;
 		public ExpressionsContext expressions;
 		public Token INPUT;
-		public ExpressionContext expression;
 		public Token RETURN;
+		public ExpressionContext expression;
 		public FuncInvocationContext funcInvocation;
 		public ExpressionContext e1;
 		public ExpressionContext e2;
@@ -611,13 +611,13 @@ public class PmmParser extends Parser {
 			return getRuleContext(ExpressionsContext.class,0);
 		}
 		public TerminalNode INPUT() { return getToken(PmmParser.INPUT, 0); }
+		public TerminalNode RETURN() { return getToken(PmmParser.RETURN, 0); }
 		public List<ExpressionContext> expression() {
 			return getRuleContexts(ExpressionContext.class);
 		}
 		public ExpressionContext expression(int i) {
 			return getRuleContext(ExpressionContext.class,i);
 		}
-		public TerminalNode RETURN() { return getToken(PmmParser.RETURN, 0); }
 		public FuncInvocationContext funcInvocation() {
 			return getRuleContext(FuncInvocationContext.class,0);
 		}
@@ -674,10 +674,10 @@ public class PmmParser extends Parser {
 				setState(139);
 				((StatementContext)_localctx).INPUT = match(INPUT);
 				setState(140);
-				((StatementContext)_localctx).expression = expression(0);
+				((StatementContext)_localctx).expressions = expressions();
 				setState(141);
 				match(T__0);
-				_localctx.ast.add(new Input(((StatementContext)_localctx).INPUT.getLine(), ((StatementContext)_localctx).INPUT.getCharPositionInLine()+1, ((StatementContext)_localctx).expression.ast));
+				for(Expression exp : ((StatementContext)_localctx).expressions.ast) {_localctx.ast.add(new Input(((StatementContext)_localctx).INPUT.getLine(), ((StatementContext)_localctx).INPUT.getCharPositionInLine()+1, exp));}
 				}
 				break;
 			case 3:
@@ -1912,8 +1912,8 @@ public class PmmParser extends Parser {
 		"\u0082\b\4\1\2\u0082\u0084\3\2\2\2\u0083\177\3\2\2\2\u0084\u0087\3\2\2"+
 		"\2\u0085\u0083\3\2\2\2\u0085\u0086\3\2\2\2\u0086\7\3\2\2\2\u0087\u0085"+
 		"\3\2\2\2\u0088\u0089\7#\2\2\u0089\u008a\5\6\4\2\u008a\u008b\7\3\2\2\u008b"+
-		"\u008c\b\5\1\2\u008c\u00b4\3\2\2\2\u008d\u008e\7%\2\2\u008e\u008f\5\4"+
-		"\3\2\u008f\u0090\7\3\2\2\u0090\u0091\b\5\1\2\u0091\u00b4\3\2\2\2\u0092"+
+		"\u008c\b\5\1\2\u008c\u00b4\3\2\2\2\u008d\u008e\7%\2\2\u008e\u008f\5\6"+
+		"\4\2\u008f\u0090\7\3\2\2\u0090\u0091\b\5\1\2\u0091\u00b4\3\2\2\2\u0092"+
 		"\u0093\7$\2\2\u0093\u0094\5\4\3\2\u0094\u0095\7\3\2\2\u0095\u0096\b\5"+
 		"\1\2\u0096\u00b4\3\2\2\2\u0097\u0098\5$\23\2\u0098\u0099\7\3\2\2\u0099"+
 		"\u009a\b\5\1\2\u009a\u00b4\3\2\2\2\u009b\u009c\5\4\3\2\u009c\u009d\7\30"+

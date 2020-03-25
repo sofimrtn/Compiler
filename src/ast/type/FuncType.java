@@ -1,6 +1,8 @@
 package ast.type;
 
 import ast.definition.VarDefinition;
+import ast.expression.Expression;
+import visitor.Visitor;
 
 import java.util.List;
 
@@ -29,5 +31,18 @@ public class FuncType extends AbstractType{
 
     public void setVariables(List<VarDefinition> variables) {
         this.variables = variables;
+    }
+
+    @Override
+    public Type parenthesis(List<Expression> expressions){
+        //TODO
+        //se puede hacer uso del promotes.
+        //recorrer ambas listas sincronizadamente si todos promotesTo -->> return type, sino, null.
+        return null;
+    }
+
+    @Override
+    public <T, P> T accept(Visitor<T, P> visitor, P param) {
+        return visitor.visit(this,param);
     }
 }

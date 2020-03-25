@@ -1,12 +1,37 @@
 package visitor;
 
+import ast.Program;
+import ast.definition.Definition;
 import ast.definition.FuncDefinition;
 import ast.definition.VarDefinition;
 import ast.expression.*;
-import ast.statement.Assignment;
-import ast.statement.Statement;
+import ast.statement.*;
+import ast.type.*;
 
 public class AbstractVisitor<T, P> implements Visitor<T, P> {
+
+    @Override
+    public T visit(VarDefinition varDefinition, P param) {
+        varDefinition.accept(this,param);
+        return null;
+    }
+
+    @Override
+    public T visit(FuncDefinition funcDefinition, P param) {
+        for(Statement s : funcDefinition.getStatements()){
+            s.accept(this,param);
+        }
+        funcDefinition.accept(this,param);
+        return null;
+    }
+
+    @Override
+    public T visit (Program program, P param){
+        for(Definition d : program.getDefinitions()){
+            d.accept(this,param);
+        }
+        return null;
+    }
 
     @Override
     public T visit(Arithmetic arithmetic, P param) {
@@ -120,26 +145,128 @@ public class AbstractVisitor<T, P> implements Visitor<T, P> {
     @Override
     public T visit(Assignment assignment, P param) {
         if(assignment.getLeft()!=null){
-            assignment.accept(this,param);
+            assignment.getLeft().accept(this,param);
         }
         if(assignment.getRight()!=null){
-            assignment.accept(this,param);
+            assignment.getRight().accept(this,param);
         }
         return null;
     }
 
     @Override
-    public T visit(VarDefinition varDefinition, P param) {
-        varDefinition.accept(this,param);
+    public T visit(IfElse ifElse, P param) {
+        if(ifElse.getCondition()!=null){
+            ifElse.getCondition().accept(this,param);
+        }
+        if(ifElse.getIfStatements()!=null){
+            for(Statement st : ifElse.getIfStatements()){
+                st.accept(this,param);
+            }
+        }
+        if(ifElse.getElseStatements()!=null){
+            for(Statement st : ifElse.getElseStatements()){
+                st.accept(this,param);
+            }
+        }
         return null;
     }
 
     @Override
-    public T visit(FuncDefinition funcDefinition, P param) {
-        for(Statement s : funcDefinition.getStatements()){
-            s.accept(this,param);
+    public T visit(Input input, P param) {
+        if(input.getExpression()!=null){
+            input.getExpression().accept(this,param);
         }
-        funcDefinition.accept(this,param);
         return null;
     }
+
+    @Override
+    public T visit(Print print, P param) {
+        if(print.getExpression()!=null){
+            print.getExpression().accept(this,param);
+        }
+        return null;
+    }
+
+    @Override
+    public T visit(Return ret, P param) {
+        if(ret.getExpression()!=null){
+            ret.getExpression().accept(this,param);
+        }
+        return null;
+    }
+
+    @Override
+    public T visit(While wh, P param) {
+        if (wh.getCondition()!=null){
+            wh.getCondition().accept(this,param);
+        }
+        if(wh.getStatements()!=null){
+            for(Statement st : wh.getStatements()){
+                st.accept(this,param);
+            }
+        }
+        return null;
+    }
+
+    @Override
+    public T visit(Array array, P param) {
+        return null;
+    }
+
+    @Override
+    public T visit(CharType charType, P param) {
+        return null;
+    }
+
+    @Override
+    public T visit(DoubleType doubleType, P param) {
+        return null;
+    }
+
+    @Override
+    public T visit(ErrorType errorType, P param) {
+        if(errorType.getNode()!=null){
+            errorType.getNode().accept(this,param);
+        }
+        return null;
+    }
+
+    @Override
+    public T visit(FuncType funcType, P param) {
+        if(funcType.getVariables() != null){
+            for(VarDefinition var : funcType.getVariables()){
+                var.accept(this,param);
+            }
+        }
+        return null;
+    }
+
+    @Override
+    public T visit(IntType intType, P param) {
+        return null;
+    }
+
+    @Override
+    public T visit(Record record, P param) {
+        if(record.getFields()!=null){
+            for(RecordField field : record.getFields()){
+                field.accept(this,param);
+            }
+        }
+        return null;
+    }
+
+    @Override
+    public T visit(RecordField recordField, P param) {
+        if(recordField!=null){
+            recordField.getType().accept(this,param);
+        }
+        return null;
+    }
+
+    @Override
+    public T visit(VoidType voidType, P param) {
+        return null;
+    }
+
 }

@@ -21,6 +21,6 @@ public class Program extends AbstractASTNode {
 
     @Override
     public <T, P> T accept(Visitor<T, P> visitor, P param) {
-        return null;
+        return visitor.visit(this,param);
     }
 }

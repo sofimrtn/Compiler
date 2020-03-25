@@ -34,4 +34,13 @@ public class ErrorType extends AbstractType {
     public String toString(){
         return "Error in line " + getLine() + " and column " + getColumn() + ": " + getMessage();
     }
+
+    public ASTNode getNode() {
+        return node;
+    }
+
+    @Override
+    public <T, P> T accept(Visitor<T, P> visitor, P param) {
+        return visitor.visit(this,param);
+    }
 }

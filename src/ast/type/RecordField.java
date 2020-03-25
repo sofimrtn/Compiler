@@ -1,5 +1,9 @@
 package ast.type;
 
+import visitor.Visitor;
+
+import java.util.Objects;
+
 public class RecordField extends AbstractType{
 
     private String name;
@@ -25,5 +29,25 @@ public class RecordField extends AbstractType{
 
     public void setType(Type type) {
         this.type = type;
+    }
+
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        RecordField that = (RecordField) o;
+        return name.equals(that.name) &&
+                type.equals(that.type);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(name, type);
+    }
+
+    @Override
+    public <T, P> T accept(Visitor<T, P> visitor, P param) {
+        return visitor.visit(this,param);
     }
 }

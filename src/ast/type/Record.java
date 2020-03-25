@@ -1,5 +1,7 @@
 package ast.type;
 
+import visitor.Visitor;
+
 import java.util.List;
 
 public class Record extends AbstractType{
@@ -17,5 +19,16 @@ public class Record extends AbstractType{
 
     public List<RecordField> getFields() {
         return fields;
+    }
+
+    @Override
+    public Type dot(String name){ //buscar en la lista de fields uno con igual nombre que name. Si lo hay devolver tipo, sino null
+        //TODO
+        return null;
+    }
+
+    @Override
+    public <T, P> T accept(Visitor<T, P> visitor, P param) {
+        return visitor.visit(this,param);
     }
 }

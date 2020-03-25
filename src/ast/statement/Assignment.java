@@ -1,6 +1,7 @@
 package ast.statement;
 
 import ast.expression.*;
+import visitor.Visitor;
 
 public class Assignment extends AbstractStatement{
 
@@ -37,5 +38,10 @@ public class Assignment extends AbstractStatement{
 
     public void setLValue(boolean lValue) {
         this.lValue = lValue;
+    }
+
+    @Override
+    public <T, P> T accept(Visitor<T, P> visitor, P param) {
+        return visitor.visit(this,param);
     }
 }

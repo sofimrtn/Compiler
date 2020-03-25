@@ -1,10 +1,13 @@
-"""
-	Errors Handler
-	DLP 19/20
-"""
-i, i:int; # Error: duplicated variable
+integer:int;
+character:char;
+real, integer:double; # Error 1
 
-# Main program
+def p(a:int): {
+  a:char;             # Error 2
+}
+
 def main(): {
-	i = 0;
+  character:double;
+  input integer, i;   # Error 3
+  f();                # Error 4
 }

@@ -7,6 +7,7 @@ import java.io.PrintStream;
 import ast.Program;
 import introspector.model.IntrospectorModel;
 import introspector.view.IntrospectorTree;
+import visitor.semantic.VisitorIdentification;
 
 public class Main {
 
@@ -25,6 +26,7 @@ public class Main {
 		PmmParser parser = new PmmParser(tokens);
 		Program ast = parser.program().ast;
 
+		ast.accept(new VisitorIdentification(), null);
 		// * Check errors
 		if(ErrorHandler.getInstance().hasErrors()){
 			// * Show errors

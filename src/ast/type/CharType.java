@@ -15,4 +15,22 @@ public class CharType extends AbstractType {
         return instance;
     }
 
+    @Override
+    public Type arithmetic(Type type){
+        if(type instanceof ErrorType || type instanceof CharType){
+            return type;
+        }
+        return null;
+    }
+
+    @Override
+    public boolean isBuiltInType(){
+        return true;
+    }
+
+    @Override
+    public <T, P> T accept(Visitor<T, P> visitor, P param) {
+        return visitor.visit(this,param);
+    }
+
 }

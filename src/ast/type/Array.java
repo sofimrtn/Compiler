@@ -28,4 +28,20 @@ public class Array extends AbstractType {
     public void setType(Type type) {
         this.type = type;
     }
+
+    @Override
+    public Type squareBrackets(Type type){
+        if(type instanceof ErrorType){
+            return type;
+        }
+        if(type instanceof IntType){
+           return this.type;
+        }
+        return null;
+    }
+
+    @Override
+    public <T, P> T accept(Visitor<T, P> visitor, P param) {
+        return visitor.visit(this,param);
+    }
 }
