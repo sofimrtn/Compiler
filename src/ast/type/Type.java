@@ -14,6 +14,7 @@ public interface Type extends ASTNode {
     Type logic(Type type);
     Type logic();
     Type promotesTo(Type type);
+    Type canBeCastTo(Type type);
     boolean isBuiltInType();
     Type squareBrackets(Type type);
     Type dot(String name);

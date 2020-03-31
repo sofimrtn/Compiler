@@ -12,7 +12,8 @@ public class AbstractVisitor<T, P> implements Visitor<T, P> {
 
     @Override
     public T visit(VarDefinition varDefinition, P param) {
-        varDefinition.accept(this,param);
+        if (varDefinition.getType() != null)
+            varDefinition.getType().accept( this, param );
         return null;
     }
 
@@ -21,7 +22,7 @@ public class AbstractVisitor<T, P> implements Visitor<T, P> {
         for(Statement s : funcDefinition.getStatements()){
             s.accept(this,param);
         }
-        funcDefinition.accept(this,param);
+        funcDefinition.getType().accept(this,param);
         return null;
     }
 

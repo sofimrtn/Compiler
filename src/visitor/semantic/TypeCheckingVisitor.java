@@ -1,12 +1,12 @@
 package visitor.semantic;
 
 import ast.expression.*;
-import ast.statement.Assignment;
-import ast.statement.IfElse;
-import ast.statement.Statement;
-import ast.statement.While;
+import ast.statement.*;
 import ast.type.*;
 import visitor.AbstractVisitor;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class TypeCheckingVisitor extends AbstractVisitor<Object, Object> {
 
@@ -42,7 +42,13 @@ public class TypeCheckingVisitor extends AbstractVisitor<Object, Object> {
     @Override
     public Object visit(Cast cast, Object param) {
         cast.getExpression().accept(this,param);
+        cast.getType().accept(this, param);
         cast.setLValue(false);
+
+        cast.setType(cast.getType().canBeCastTo(cast.getExpression().getType()));
+        if(cast.getType() == null){
+            cast.setType(new ErrorType(cast, "Cannot cast expression"));
+        }
         return null;
     }
 
@@ -58,6 +64,12 @@ public class TypeCheckingVisitor extends AbstractVisitor<Object, Object> {
         comparison.getLeft().accept(this,param);
         comparison.getRight().accept(this,param);
         comparison.setLValue(false);
+
+        comparison.setType(comparison.getLeft().getType().comparison(comparison.getRight().getType()));
+        if(comparison.getType() == null){
+            comparison.setType(new ErrorType(comparison, "Incompatible types " + comparison.getLeft().getType()
+                            + " and " + comparison.getRight().getType()));
+        }
         return null;
     }
 
@@ -70,7 +82,7 @@ public class TypeCheckingVisitor extends AbstractVisitor<Object, Object> {
         fieldAccess.setType(fieldAccess.getExpression().getType().dot(fieldAccess.getName()));
 
         if(fieldAccess.getType() == null){
-            fieldAccess.setType(new ErrorType(fieldAccess, "")); //TODO
+            fieldAccess.setType(new ErrorType(fieldAccess, "Incompatible types for field access"));
         }
         return null;
     }
@@ -83,7 +95,11 @@ public class TypeCheckingVisitor extends AbstractVisitor<Object, Object> {
         }
         funcInvocation.setLValue(false);
         //en el tipo del parametro de la funcion, comprobar si el tipo de los parametros es igual.
-        funcInvocation.getVar().getType().parenthesis(funcInvocation.getExpressions());
+        funcInvocation.setType(funcInvocation.getVar().getType().parenthesis(funcInvocation.getExpressions()));
+        if(funcInvocation.getType() == null){
+            funcInvocation.setType(new ErrorType(funcInvocation, "Invocation not possible, incopatible" +
+                    "type"));
+        }
         return null;
     }
 
@@ -99,6 +115,12 @@ public class TypeCheckingVisitor extends AbstractVisitor<Object, Object> {
         logicOperator.getLeft().accept(this,param);
         logicOperator.getRight().accept(this,param);
         logicOperator.setLValue(false);
+
+        logicOperator.setType(logicOperator.getLeft().getType().logic(logicOperator.getRight().getType()));
+        if(logicOperator.getType() == null){
+            logicOperator.setType(new ErrorType(logicOperator, "Incompatible types " + logicOperator.getLeft().getType()
+                                + " and " + logicOperator.getRight().getType()));
+        }
         return null;
     }
 
@@ -106,6 +128,11 @@ public class TypeCheckingVisitor extends AbstractVisitor<Object, Object> {
     public Object visit(Negation negation, Object param) {
         negation.getExpression().accept(this,param);
         negation.setLValue(false);
+
+        negation.setType(negation.getExpression().getType().logic());
+        if(negation.getType() == null){
+            negation.setType(new ErrorType(negation, "Incompatible type " + negation.getExpression().getType()));
+        }
         return null;
     }
 
@@ -120,13 +147,20 @@ public class TypeCheckingVisitor extends AbstractVisitor<Object, Object> {
     public Object visit(UnaryMinus unaryMinus, Object param) {
         unaryMinus.getExpression().accept(this,param);
         unaryMinus.setLValue(false);
+
+        unaryMinus.setType(unaryMinus.getExpression().getType().arithmetic());
+        if(unaryMinus.getType() == null){
+            unaryMinus.setType(new ErrorType(unaryMinus, "Incompatible type " + unaryMinus.getExpression().getType()));
+        }
         return null;
     }
 
     @Override
     public Object visit(Variable variable, Object param) {
         variable.setLValue(true);
-        variable.setType(variable.getDefinition().getType());
+        if(variable.getDefinition() != null){
+            variable.setType(variable.getDefinition().getType());
+        }
         return null;
     }
 
@@ -138,6 +172,13 @@ public class TypeCheckingVisitor extends AbstractVisitor<Object, Object> {
             new ErrorType(assignment, "Se esperaba LValue");
         }
         assignment.setLValue(false);
+
+        if (assignment.getLeft().getType() != null && assignment.getRight().getType() != null) {
+            assignment.getLeft().setType(assignment.getRight().getType().promotesTo(assignment.getLeft().getType()));
+            if(assignment.getLeft().getType() == null){
+                assignment.getLeft().setType(new ErrorType(assignment.getLeft(), "Incompatible types "));
+            }
+        }
         return null;
     }
 
@@ -166,6 +207,15 @@ public class TypeCheckingVisitor extends AbstractVisitor<Object, Object> {
         }
         for(Statement st : ifElse.getElseStatements()){
             st.accept(this,param);
+        }
+        return null;
+    }
+
+    @Override
+    public Boolean visit(Input input, Object param){
+        input.getExpression().accept(this,param);
+        if(!input.getExpression().getLValue()){
+            new ErrorType(input, "Se esperaba LValue");
         }
         return null;
     }

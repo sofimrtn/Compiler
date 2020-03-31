@@ -7,6 +7,7 @@ import java.io.PrintStream;
 import ast.Program;
 import introspector.model.IntrospectorModel;
 import introspector.view.IntrospectorTree;
+import visitor.semantic.TypeCheckingVisitor;
 import visitor.semantic.VisitorIdentification;
 
 public class Main {
@@ -27,6 +28,7 @@ public class Main {
 		Program ast = parser.program().ast;
 
 		ast.accept(new VisitorIdentification(), null);
+		ast.accept(new TypeCheckingVisitor(), null);
 		// * Check errors
 		if(ErrorHandler.getInstance().hasErrors()){
 			// * Show errors

@@ -34,6 +34,33 @@ public class DoubleType extends AbstractType{
     }
 
     @Override
+    public Type comparison(Type type){
+        if (type instanceof ErrorType || type instanceof DoubleType) {
+            return type;
+        }
+        return null;
+    }
+
+    @Override
+    public Type canBeCastTo(Type type){
+        if(type instanceof ErrorType){
+            return type;
+        }
+        if(type instanceof CharType || type instanceof IntType || type instanceof DoubleType){
+            return this;
+        }
+        return null;
+    }
+
+    @Override
+    public Type promotesTo(Type type){
+        if (type instanceof ErrorType || type instanceof DoubleType) {
+            return type;
+        }
+        return null;
+    }
+
+    @Override
     public <T, P> T accept(Visitor<T, P> visitor, P param) {
         return visitor.visit(this,param);
     }

@@ -16,6 +16,11 @@ public class VoidType extends AbstractType {
     }
 
     @Override
+    public boolean isBuiltInType(){
+        return true;
+    }
+
+    @Override
     public <T, P> T accept(Visitor<T, P> visitor, P param) {
         return visitor.visit(this,param);
     }

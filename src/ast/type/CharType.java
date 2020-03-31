@@ -16,16 +16,69 @@ public class CharType extends AbstractType {
     }
 
     @Override
-    public Type arithmetic(Type type){
-        if(type instanceof ErrorType || type instanceof CharType){
+    public boolean isBuiltInType(){
+        return true;
+    }
+
+    @Override
+    public Type logic( Type type ) {
+        if (type instanceof ErrorType) {
             return type;
+        }
+        if (type instanceof CharType || type instanceof IntType) {
+            return IntType.getInstance();
         }
         return null;
     }
 
     @Override
-    public boolean isBuiltInType(){
-        return true;
+    public Type logic() {
+        return this;
+    }
+
+    @Override
+    public Type canBeCastTo(Type type){
+        if(type instanceof ErrorType){
+            return type;
+        }
+        if(type instanceof CharType || type instanceof IntType || type instanceof DoubleType){
+            return this;
+        }
+        return null;
+    }
+
+    @Override
+    public Type arithmetic(Type type){
+        if(type instanceof ErrorType || type instanceof IntType || type instanceof DoubleType){
+            return type;
+        }
+        if(type instanceof CharType){
+            return this;
+        }
+        return null;
+    }
+
+    @Override
+    public Type comparison( Type type ) {
+        if (type instanceof ErrorType) {
+            return type;
+        }
+        if (type instanceof CharType || type instanceof IntType || type instanceof DoubleType) {
+            return IntType.getInstance();
+        }
+
+        return null;
+    }
+
+    @Override
+    public Type promotesTo(Type type){
+        if(type instanceof ErrorType || type instanceof IntType || type instanceof DoubleType){
+            return type;
+        }
+        if(type instanceof CharType){
+            return this;
+        }
+        return null;
     }
 
     @Override

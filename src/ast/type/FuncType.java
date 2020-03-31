@@ -35,9 +35,14 @@ public class FuncType extends AbstractType{
 
     @Override
     public Type parenthesis(List<Expression> expressions){
-        //TODO
         //se puede hacer uso del promotes.
         //recorrer ambas listas sincronizadamente si todos promotesTo -->> return type, sino, null.
+        for(int i=0; i<expressions.size(); i++){
+            if(expressions.get(i).getType().promotesTo(variables.get(i).getType()) != null){
+                return this.type;
+            }
+            return null;
+        }
         return null;
     }
 

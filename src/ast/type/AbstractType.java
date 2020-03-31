@@ -48,6 +48,11 @@ public abstract class AbstractType extends AbstractASTNode implements Type {
     }
 
     @Override
+    public Type canBeCastTo(Type type){
+        return null;
+    }
+
+    @Override
     public boolean isBuiltInType(){
         return false;
     }

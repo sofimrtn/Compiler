@@ -36,6 +36,46 @@ public class IntType extends AbstractType{
     }
 
     @Override
+    public Type comparison( Type type ) {
+        if (type instanceof ErrorType || type instanceof IntType) {
+            return type;
+        }
+        return null;
+    }
+
+    @Override
+    public Type logic( Type type ) {
+        if (type instanceof ErrorType || type instanceof IntType) {
+            return type;
+        }
+        return null;
+    }
+
+    @Override
+    public Type logic(){
+        return this;
+    }
+
+    @Override
+    public Type canBeCastTo(Type type){
+        if(type instanceof ErrorType){
+            return type;
+        }
+        if(type instanceof CharType || type instanceof IntType || type instanceof DoubleType){
+            return this;
+        }
+        return null;
+    }
+
+    @Override
+    public Type promotesTo(Type type){
+        if (type instanceof ErrorType || type instanceof IntType) {
+            return type;
+        }
+        return null;
+    }
+
+    @Override
     public boolean isBuiltInType(){
         return true;
     }
