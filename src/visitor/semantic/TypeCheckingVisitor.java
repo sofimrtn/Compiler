@@ -219,4 +219,9 @@ public class TypeCheckingVisitor extends AbstractVisitor<Object, Object> {
         }
         return null;
     }
+
+    /*@Override
+    public Object visit(Return ret, Type param){
+
+    }*/
 }

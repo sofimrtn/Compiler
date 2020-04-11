@@ -9,6 +9,8 @@ public class RecordField extends AbstractType{
     private String name;
     private Type type;
 
+    private int offset;
+
     public RecordField(int line, int column, String name, Type type) {
         super(line,column);
         this.name=name;
@@ -49,5 +51,18 @@ public class RecordField extends AbstractType{
     @Override
     public <T, P> T accept(Visitor<T, P> visitor, P param) {
         return visitor.visit(this,param);
+    }
+
+    @Override
+    public int getSize() {
+        return this.getType().getSize();
+    }
+
+    public int getOffset(){
+        return offset;
+    }
+
+    public void setOffset(int offset){
+        this.offset = offset;
     }
 }

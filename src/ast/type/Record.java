@@ -22,6 +22,15 @@ public class Record extends AbstractType{
     }
 
     @Override
+    public int getSize() {
+        int size = 0;
+        for(RecordField r : this.getFields()){
+            size += r.getType().getSize();
+        }
+        return size;
+    }
+
+    @Override
     public Type dot(String name){ //buscar en la lista de fields uno con igual nombre que name. Si lo hay devolver tipo,
         // sino null
         for (RecordField field : this.getFields()){

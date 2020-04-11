@@ -16,6 +16,11 @@ public class DoubleType extends AbstractType{
     }
 
     @Override
+    public int getSize() {
+        return 4;
+    }
+
+    @Override
     public Type arithmetic(Type type){
         if(type instanceof ErrorType || type instanceof DoubleType){
             return type;

@@ -44,6 +44,10 @@ public class VarDefinition extends AbstractASTNode implements Definition, Statem
         return offset;
     }
 
+    public void setOffset(int offset){
+        this.offset = offset;
+    }
+
     public void setType(Type type){
         this.type=type;
     }

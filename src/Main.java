@@ -7,6 +7,7 @@ import java.io.PrintStream;
 import ast.Program;
 import introspector.model.IntrospectorModel;
 import introspector.view.IntrospectorTree;
+import visitor.codeGenerator.OffsetVisitor;
 import visitor.semantic.TypeCheckingVisitor;
 import visitor.semantic.VisitorIdentification;
 
@@ -35,6 +36,7 @@ public class Main {
 			ErrorHandler.getInstance().showErrors(new PrintStream(System.err));
 		}
 		else{
+			ast.accept(new OffsetVisitor(), null);
 			// * The AST is shown
 			IntrospectorModel model=new IntrospectorModel("Program", ast);
 			new IntrospectorTree("Introspector", model);

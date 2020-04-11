@@ -16,6 +16,11 @@ public class VoidType extends AbstractType {
     }
 
     @Override
+    public int getSize() {
+        return 0;
+    }
+
+    @Override
     public boolean isBuiltInType(){
         return true;
     }

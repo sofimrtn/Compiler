@@ -48,6 +48,11 @@ public class CharType extends AbstractType {
     }
 
     @Override
+    public int getSize() {
+        return 1;
+    }
+
+    @Override
     public Type arithmetic(Type type){
         if(type instanceof ErrorType || type instanceof IntType || type instanceof DoubleType){
             return type;

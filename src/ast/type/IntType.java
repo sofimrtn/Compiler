@@ -18,6 +18,11 @@ public class IntType extends AbstractType{
     }
 
     @Override
+    public int getSize() {
+        return 2;
+    }
+
+    @Override
     public boolean isLogical(){
         return true;
     }

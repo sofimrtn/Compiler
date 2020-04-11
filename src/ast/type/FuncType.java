@@ -34,6 +34,14 @@ public class FuncType extends AbstractType{
     }
 
     @Override
+    public int getSize(){
+        if(this.getType() instanceof ErrorType){
+            throw new IllegalStateException();
+        }
+        return this.getType().getSize();
+    }
+
+    @Override
     public Type parenthesis(List<Expression> expressions){
         //se puede hacer uso del promotes.
         //recorrer ambas listas sincronizadamente si todos promotesTo -->> return type, sino, null.

@@ -13,12 +13,9 @@ public class Array extends AbstractType {
         this.type=type;
     }
 
+    @Override
     public int getSize() {
-        return size;
-    }
-
-    public void setSize(int size) {
-        this.size = size;
+        return this.getType().getSize() * size;
     }
 
     public Type getType() {
