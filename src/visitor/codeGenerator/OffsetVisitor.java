@@ -25,13 +25,13 @@ public class OffsetVisitor extends AbstractVisitor {
             bytesGlobals += var.getType().getSize();
         }
         else{ //variable local: - sumatorio variables anteriores (y si misma)
-            if((boolean)param){
+            /**if((boolean)param){
                 var.setOffset( bytesParam );
                 bytesParam += var.getType().getSize();
-            } else{
+            } else{**/
                 bytesLocal -= var.getType().getSize();
                 var.setOffset(bytesLocal);
-            }
+            //}
         }
         System.out.println("Variable: " + var.getName() + ", offset: " + var.getOffset());
         return null;
@@ -39,19 +39,29 @@ public class OffsetVisitor extends AbstractVisitor {
 
     @Override
     public Object visit(FuncType functionType, Object param ) {
-        functionType.getType().accept( this, param );
-        for (int i = functionType.getVariables().size() - 1; i >= 0; i--) { //parametros: 4 + tam argumentos a la dcha (sin si mismo)
-            functionType.getVariables().get(i).accept(this,true);
+        /*for (int i = functionType.getVariables().size() - 1; i >= 0; i--) { //parametros: 4 + tam argumentos a la dcha (sin si mismo)
+            //functionType.getVariables().get(i).accept(this,true);
+            functionType.getVariables().get(i).setOffset( bytesParam );
+            bytesParam += functionType.getVariables().get(i).getType().getSize();
+            System.out.println("Parametro: " + functionType.getVariables().get(i).getName() + ", offset: " + functionType.getVariables().get(i).getOffset());
+        }*/
+        for(int i = 0; i < functionType.getVariables().size(); i++) {
+            // Calculamos offset de los parámetros
+            // bp + 4 + sumatorio tamaño argumentos a su derecha (sin incluirse a sí mismo)
+            if(i == functionType.getVariables().size()-1)
+                functionType.getVariables().get(i).setOffset(4);
+            else {
+                bytesParam += functionType.getVariables().get(i+1).getType().getSize();
+                functionType.getVariables().get(i).setOffset(bytesParam);
+            }
+            System.out.println("Parametro: " + functionType.getVariables().get(i).getName() + ", offset: " + functionType.getVariables().get(i).getOffset());
         }
         return null;
     }
 
     @Override
     public Object visit(FuncDefinition funcDefinition, Object param){
-        funcDefinition.getType().accept(this, param);
-        for(Statement s : funcDefinition.getStatements()) {
-            s.accept(this, false);
-        }
+        super.visit(funcDefinition,param);
         this.bytesLocal = 0;
         this.bytesParam = 4;
         return null;
@@ -61,7 +71,6 @@ public class OffsetVisitor extends AbstractVisitor {
     public Object visit(Record record, Object param){
         int offset = 0;
         for(RecordField r : record.getFields()){// sumatorio de los campos anteriores.
-            r.accept(this,param);
             r.setOffset(offset);
             offset += r.getType().getSize();
         }

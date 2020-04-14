@@ -1,15 +1,9 @@
-"""
-	Errors Handler
-	DLP 19/20
-"""
 
-tuple: struct { 
-	key:int;	
-	value:int;	
-	key:double; # Error: duplicated field
-};
+v:[10]int ;
 
-# Main program
 def main(): {
-	tuple.key = 0;
+  i:int;
+  i[0] = 0;			# Error 1
+  v[3] = 3.4;		# Error 2
+  v[1][2] = 'a';	# Error 3
 }

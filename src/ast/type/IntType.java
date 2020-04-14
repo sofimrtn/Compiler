@@ -66,7 +66,7 @@ public class IntType extends AbstractType{
         if(type instanceof ErrorType){
             return type;
         }
-        if(type instanceof CharType || type instanceof IntType || type instanceof DoubleType){
+        if(type instanceof IntType || type instanceof DoubleType){
             return this;
         }
         return null;
@@ -74,8 +74,11 @@ public class IntType extends AbstractType{
 
     @Override
     public Type promotesTo(Type type){
-        if (type instanceof ErrorType || type instanceof IntType) {
+        if (type instanceof ErrorType) {
             return type;
+        }
+        if(type instanceof IntType || type instanceof DoubleType){
+            return this;
         }
         return null;
     }
@@ -88,6 +91,23 @@ public class IntType extends AbstractType{
     @Override
     public <T, P> T accept(Visitor<T, P> visitor, P param) {
         return visitor.visit(this,param);
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj)
+            return true;
+        if (obj == null)
+            return false;
+        if (getClass() != obj.getClass())
+            return false;
+        IntType other = (IntType) obj;
+        if (instance == null) {
+            if (other.instance != null)
+                return false;
+        } else if (!instance.equals(other.instance))
+            return false;
+        return true;
     }
 
 }

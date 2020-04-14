@@ -1,10 +1,10 @@
 package ast.type;
 
+import ast.main.ASTNode;
 import visitor.Visitor;
 
-import java.util.Objects;
 
-public class RecordField extends AbstractType{
+public class RecordField implements ASTNode {
 
     private String name;
     private Type type;
@@ -12,7 +12,6 @@ public class RecordField extends AbstractType{
     private int offset;
 
     public RecordField(int line, int column, String name, Type type) {
-        super(line,column);
         this.name=name;
         this.type=type;
     }
@@ -39,13 +38,29 @@ public class RecordField extends AbstractType{
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         RecordField that = (RecordField) o;
-        return name.equals(that.name) &&
-                type.equals(that.type);
+        if (name == null) {
+            if (that.name != null)
+                return false;
+        } else if (!name.equals(that.name))
+            return false;
+        return true;
+    }
+    @Override
+    public int hashCode() {
+        final int prime = 31;
+        int result = 1;
+        result = prime * result + ((name == null) ? 0 : name.hashCode());
+        return result;
     }
 
     @Override
-    public int hashCode() {
-        return Objects.hash(name, type);
+    public int getLine() {
+        return 0;
+    }
+
+    @Override
+    public int getColumn() {
+        return 0;
     }
 
     @Override
@@ -53,7 +68,6 @@ public class RecordField extends AbstractType{
         return visitor.visit(this,param);
     }
 
-    @Override
     public int getSize() {
         return this.getType().getSize();
     }

@@ -29,4 +29,22 @@ public class VoidType extends AbstractType {
     public <T, P> T accept(Visitor<T, P> visitor, P param) {
         return visitor.visit(this,param);
     }
+
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj)
+            return true;
+        if (obj == null)
+            return false;
+        if (getClass() != obj.getClass())
+            return false;
+        VoidType other = (VoidType) obj;
+        if (instance == null) {
+            if (other.instance != null)
+                return false;
+        } else if (!instance.equals(other.instance))
+            return false;
+        return true;
+    }
 }

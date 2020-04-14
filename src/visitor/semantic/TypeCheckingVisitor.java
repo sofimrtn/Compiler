@@ -1,12 +1,10 @@
 package visitor.semantic;
 
+import ast.definition.FuncDefinition;
 import ast.expression.*;
 import ast.statement.*;
 import ast.type.*;
 import visitor.AbstractVisitor;
-
-import java.util.ArrayList;
-import java.util.List;
 
 public class TypeCheckingVisitor extends AbstractVisitor<Object, Object> {
 
@@ -104,6 +102,17 @@ public class TypeCheckingVisitor extends AbstractVisitor<Object, Object> {
     }
 
     @Override
+    public Object visit(FuncDefinition funcDefinition, Object param) {
+        funcDefinition.getType().accept(this,param);
+        if(funcDefinition.getStatements()!=null){
+            for(Statement s : funcDefinition.getStatements()){
+                s.accept(this,funcDefinition.getType());
+            }
+        }
+        return null;
+    }
+
+    @Override
     public Object visit(IntLiteral intLiteral, Object param) {
         intLiteral.setLValue(false);
         intLiteral.setType(IntType.getInstance());
@@ -169,7 +178,7 @@ public class TypeCheckingVisitor extends AbstractVisitor<Object, Object> {
         assignment.getLeft().accept(this, o);
         assignment.getRight().accept(this, o);
         if(!assignment.getLeft().getLValue()) {
-            new ErrorType(assignment, "Se esperaba LValue");
+            new ErrorType(assignment, "LValue expected");
         }
         assignment.setLValue(false);
 
@@ -215,13 +224,18 @@ public class TypeCheckingVisitor extends AbstractVisitor<Object, Object> {
     public Boolean visit(Input input, Object param){
         input.getExpression().accept(this,param);
         if(!input.getExpression().getLValue()){
-            new ErrorType(input, "Se esperaba LValue");
+            new ErrorType(input, "LValue expected");
         }
         return null;
     }
 
-    /*@Override
-    public Object visit(Return ret, Type param){
-
-    }*/
+    @Override
+    public Object visit(Return ret, Object param){
+        Type returnType = ((FuncType)param).getType();
+        ret.getExpression().accept(this,param);
+        if(!ret.getExpression().getType().equals(returnType)){
+            new ErrorType(ret, "Return types dont match");
+        }
+        return null;
+    }
 }
