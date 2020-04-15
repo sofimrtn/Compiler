@@ -34,11 +34,11 @@ public class FuncType extends AbstractType{
     }
 
     @Override
-    public int getSize(){
+    public int numberOfBytes(){
         if(this.getType() instanceof ErrorType){
             throw new IllegalStateException();
         }
-        return this.getType().getSize();
+        return this.getType().numberOfBytes();
     }
 
     @Override

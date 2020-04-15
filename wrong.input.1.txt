@@ -9,7 +9,7 @@ def f(pi:int, pr:double ): int {
   li:int;
   li = pi;
   lr = pr;
-  return pr;
+  return pi;
 }
 
 # Main program

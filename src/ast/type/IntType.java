@@ -18,7 +18,7 @@ public class IntType extends AbstractType{
     }
 
     @Override
-    public int getSize() {
+    public int numberOfBytes() {
         return 2;
     }
 

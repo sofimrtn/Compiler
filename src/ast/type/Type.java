@@ -7,7 +7,7 @@ import java.util.List;
 
 public interface Type extends ASTNode {
 
-    int getSize();
+    int numberOfBytes();
     boolean isLogical();
     Type arithmetic(Type type);
     Type arithmetic();

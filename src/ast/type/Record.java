@@ -22,10 +22,10 @@ public class Record extends AbstractType{
     }
 
     @Override
-    public int getSize() {
+    public int numberOfBytes() {
         int size = 0;
         for(RecordField r : this.getFields()){
-            size += r.getType().getSize();
+            size += r.getType().numberOfBytes();
         }
         return size;
     }

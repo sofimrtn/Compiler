@@ -48,7 +48,7 @@ public class CharType extends AbstractType {
     }
 
     @Override
-    public int getSize() {
+    public int numberOfBytes() {
         return 1;
     }
 

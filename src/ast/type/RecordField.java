@@ -69,7 +69,7 @@ public class RecordField implements ASTNode {
     }
 
     public int getSize() {
-        return this.getType().getSize();
+        return this.getType().numberOfBytes();
     }
 
     public int getOffset(){

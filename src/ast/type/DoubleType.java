@@ -16,7 +16,7 @@ public class DoubleType extends AbstractType{
     }
 
     @Override
-    public int getSize() {
+    public int numberOfBytes() {
         return 4;
     }
 
