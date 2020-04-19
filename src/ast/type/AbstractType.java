@@ -13,6 +13,10 @@ public abstract class AbstractType extends AbstractASTNode implements Type {
     }
 
     @Override
+    public String suffix(){
+        return "";
+    }
+    @Override
     public boolean isLogical(){
         return false;
     }

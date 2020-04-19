@@ -9,10 +9,19 @@ import ast.statement.*;
 
 public class ExecuteCGVisitor extends AbstractCGVisitor {
 
+    public ExecuteCGVisitor(CodeGenerator cg){
+        super(cg);
+    }
+    public ExecuteCGVisitor(String output){
+        this (new CodeGenerator(output));
+    }
+
     @Override
     public Object visit(Program program, Object param) {
-        //call main
-        //halt
+
+        cg.call("main"); //call main
+        cg.halt(); //halt
+
         for (Definition d : program.getDefinitions()) {
             if (d instanceof VarDefinition) {
                 d.accept( this, param );
@@ -34,8 +43,15 @@ public class ExecuteCGVisitor extends AbstractCGVisitor {
     @Override
     public Object visit(FuncDefinition funcDefinition, Object param) {
         //{nombre}:
+        cg.label(funcDefinition.getName());
         //enter{tamLocales}
+        cg.enter(funcDefinition.getType().numberOfBytes());
         //execute[[sentencia_i]]
+        for(Statement s : funcDefinition.getStatements()){
+            if(!(s instanceof VarDefinition)){
+                s.accept(this, param);
+            }
+        }
         //if(funcDefinition.getType() instanceOf VoidType)
         //  RET 0,{tamLocales},{tamParams}
         return null;
@@ -52,6 +68,7 @@ public class ExecuteCGVisitor extends AbstractCGVisitor {
         //address[[assignment.getLeft()]]
         //value[[assignment.getRight()]]
         //<store>assignment.getLeft().getType().suffix()
+        cg.store(assignment.getLeft().getType().suffix());
         return null;
     }
 
@@ -65,7 +82,9 @@ public class ExecuteCGVisitor extends AbstractCGVisitor {
     public Object visit(Input input, Object param) {
         //address[[input.getExpression()]]
         //<in>input.getExpression().getType().suffix()
+        cg.in(input.getExpression().getType().suffix());
         //<store>input.getExpression().getType().suffix()
+        cg.store(input.getExpression().getType().suffix());
         return null;
     }
 
@@ -73,7 +92,7 @@ public class ExecuteCGVisitor extends AbstractCGVisitor {
     public Object visit(Print print, Object param) {
         //valor[[ret.getExpression()]]  -> print.getExpression().accept(ValueCGVisitor,param)?????
         //<out>ret.getExpression().getType().suffix()
-
+        cg.out(print.getExpression().getType().suffix());
         return null;
     }
 

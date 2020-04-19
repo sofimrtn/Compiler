@@ -10,6 +10,12 @@ import visitor.Visitor;
 
 public abstract class AbstractCGVisitor implements Visitor<Object,Object> {
 
+    CodeGenerator cg;
+
+    public AbstractCGVisitor (CodeGenerator cg){
+        this.cg=cg;
+    }
+
     @Override
     public Object visit(Program program, Object param) {
         throw new RuntimeException();
