@@ -1,228 +1,161 @@
-#source	"input.txt"
+CALL main
+HALT
 
-	' * CharType c (offset 0)
-	' * IntType i (offset 1)
-	' * RealType r (offset 3)
+' * CharType c ( offset 0)
 
-' Invocation to the main function
-call main
-halt
+' * IntType i ( offset 1)
 
+' * DoubleType r ( offset 3)
 
-#line	5
+main:
+' * PARAMETERS
+' * LOCAL VARIABLES
+' * IntType a ( offset -2)
+' * IntType i ( offset -4)
 
- main:
-	' * Parameters
-	' * Local variables
-	' * IntType a (offset -2)
-	' * IntType i (offset -4)
-	enter	4
+ENTER 4
 
-#line	8
-	' * Assignment
-	pusha	0
-	pushb	97
-	storeb
+PUSHA 0
+PUSHB 97
+STOREb
 
-#line	9
-	' * Write
-	pusha	0
-	loadb
-	outb
+PUSHA 0
+LOADb
+OUTb
 
-#line	9
-	' * Write
-	pushb	10
-	outb
+PUSHB 10
+OUTb
 
-#line	11
-	' * Assignment
-	push	bp
-	pushi	-2
-	addi
-	pushi	1
-	storei
+PUSHA BP
+PUSHI -2
+ADDi
+PUSHI 1
+STOREi
 
-#line	12
-	' * Assignment
-	push	bp
-	pushi	-4
-	addi
-	pushb	48
-	b2i
-	pushi	3
-	muli
-	storei
+PUSHA BP
+PUSHI -4
+ADDi
+PUSHB 48
+B2I
+PUSHI 3
+MULi
+STOREi
 
-#line	13
-	' * Write
-	push	bp
-	pushi	-2
-	addi
-	loadi
-	outi
+PUSHA BP
+PUSHI -2
+ADDi
+LOADi
+OUTi
 
-#line	13
-	' * Write
-	pushb	32
-	outb
+PUSHB 32
+OUTb
 
-#line	13
-	' * Write
-	push	bp
-	pushi	-4
-	addi
-	loadi
-	outi
+PUSHA BP
+PUSHI -4
+ADDi
+LOADi
+OUTi
 
-#line	13
-	' * Write
-	pushb	10
-	outb
+PUSHB 10
+OUTb
 
-#line	15
-	' * Read
-	pusha	3
-	inf
-	storef
+PUSHA 3
+INf
+STOREf
 
-#line	16
-	' * Write
-	pushi	2
-	i2f
-	pusha	3
-	loadf
-	mulf
-	outf
+PUSHI 2
+I2F
+PUSHA 3
+LOADf
+MULf
+OUTf
 
-#line	16
-	' * Write
-	pushb	10
-	outb
+PUSHB 10
+OUTb
 
-#line	18
-	' * Write
-	pushi	3
-	i2f
-	pushf	4.5
-	subf
-	outf
+PUSHI 3
+I2F
+PUSHF 4.5
+SUBf
+OUTf
 
-#line	18
-	' * Write
-	pushb	32
-	outb
+PUSHB 32
+OUTb
 
-#line	18
-	' * Write
-	pushb	48
-	b2i
-	i2f
-	pushf	48.0
-	divf
-	outf
+PUSHB 48
+B2I
+I2F
+PUSHF 48.0
+DIVf
+OUTf
 
-#line	18
-	' * Write
-	pushb	32
-	outb
+PUSHB 32
+OUTb
 
-#line	18
-	' * Write
-	pushb	48
-	b2i
-	pushb	49
-	b2i
-	modi
-	outi
+PUSHB 48
+B2I
+PUSHB 49
+B2I
+MODi
+OUTi
 
-#line	18
-	' * Write
-	pushb	32
-	outb
+PUSHB 32
+OUTb
 
-#line	18
-	' * Write
-	pushb	48
-	b2i
-	pushb	49
-	b2i
-	addi
-	outi
+PUSHI 0
+PUSHB 49
+B2I
+ADDi
+OUTi
 
-#line	18
-	' * Write
-	pushb	10
-	outb
+PUSHB 10
+OUTb
 
-#line	22
-	' * Write
-	pushi	1
-	pushi	2
-	lti
-	outi
+PUSHI 1
+PUSHI 2
+LTi
+OUTi
 
-#line	22
-	' * Write
-	pushb	32
-	outb
+PUSHB 32
+OUTb
 
-#line	22
-	' * Write
-	pushi	4
-	pushi	3
-	gei
-	outi
+PUSHI 4
+PUSHI 3
+GEi
+OUTi
 
-#line	22
-	' * Write
-	pushb	32
-	outb
+PUSHB 32
+OUTb
 
-#line	22
-	' * Write
-	pushi	5
-	pushi	5
-	eqi
-	outi
+PUSHI 5
+PUSHI 5
+EQi
+OUTi
 
-#line	22
-	' * Write
-	pushb	32
-	outb
+PUSHB 32
+OUTb
 
-#line	22
-	' * Write
-	pushi	1
-	pushi	2
-	and
-	outi
+PUSHI 1
+PUSHI 2
+AND
+OUTi
 
-#line	22
-	' * Write
-	pushb	32
-	outb
+PUSHB 32
+OUTb
 
-#line	22
-	' * Write
-	pushi	0
-	pushi	3
-	or
-	outi
+PUSHI 0
+PUSHI 3
+OR
+OUTi
 
-#line	22
-	' * Write
-	pushb	32
-	outb
+PUSHB 32
+OUTb
 
-#line	22
-	' * Write
-	pushi	0
-	not
-	outi
+PUSHI 0
+NOT
+OUTi
 
-#line	22
-	' * Write
-	pushb	10
-	outb
-	ret	0, 4, 0
+PUSHB 10
+OUTb
+
+RET 0, 4, 0

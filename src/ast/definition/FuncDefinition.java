@@ -51,4 +51,14 @@ public class FuncDefinition extends AbstractASTNode implements Definition {
     public List<Statement> getStatements() {
         return statements;
     }
+
+    public int getSizeLocals() {
+        int size = 0;
+        for(Statement s:statements){
+            if(s instanceof VarDefinition){
+                size+=((VarDefinition) s).getType().numberOfBytes();
+            }
+        }
+        return size;
+    }
 }

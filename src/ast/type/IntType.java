@@ -66,7 +66,7 @@ public class IntType extends AbstractType{
         if(type instanceof ErrorType){
             return type;
         }
-        if(type instanceof IntType || type instanceof DoubleType){
+        if(type instanceof IntType || type instanceof DoubleType || type instanceof CharType){
             return this;
         }
         return null;
@@ -77,7 +77,7 @@ public class IntType extends AbstractType{
         if (type instanceof ErrorType) {
             return type;
         }
-        if(type instanceof IntType || type instanceof DoubleType){
+        if(type instanceof IntType || type instanceof DoubleType ){
             return this;
         }
         return null;
@@ -113,6 +113,11 @@ public class IntType extends AbstractType{
         } else if (!instance.equals(other.instance))
             return false;
         return true;
+    }
+
+    @Override
+    public String toString() {
+        return "IntType";
     }
 
 }

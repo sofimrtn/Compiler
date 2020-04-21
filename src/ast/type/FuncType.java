@@ -33,6 +33,14 @@ public class FuncType extends AbstractType{
         this.variables = variables;
     }
 
+    public int getSizeParams(){
+        int size = 0;
+        for(VarDefinition var:variables){
+            size+=var.getOffset();
+        }
+        return size;
+    }
+
     @Override
     public int numberOfBytes(){
         if(this.getType() instanceof ErrorType){

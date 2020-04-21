@@ -7,6 +7,7 @@ import java.io.PrintStream;
 import ast.Program;
 import introspector.model.IntrospectorModel;
 import introspector.view.IntrospectorTree;
+import visitor.codeGenerator.ExecuteCGVisitor;
 import visitor.codeGenerator.OffsetVisitor;
 import visitor.semantic.TypeCheckingVisitor;
 import visitor.semantic.VisitorIdentification;
@@ -40,6 +41,7 @@ public class Main {
 			// * The AST is shown
 			IntrospectorModel model=new IntrospectorModel("Program", ast);
 			new IntrospectorTree("Introspector", model);
+			ast.accept(new ExecuteCGVisitor("input.txt","output.txt"),null);
 		}
 	}
 }
