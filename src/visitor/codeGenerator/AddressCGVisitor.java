@@ -16,8 +16,11 @@ public class AddressCGVisitor extends AbstractCGVisitor {
 
     @Override
     public Object visit(ArrayAccess arrayAccess, Object param) {
+        //address[[array.getLeft]]
         arrayAccess.getLeft().accept(this,param); //meter en la pila DIRECCION donde empieza vector
+        //value[[array.getRight]]
         arrayAccess.getRight().accept(value, param); //meter en pila VALOR del indice
+        //push size
         cg.push(arrayAccess.getType().numberOfBytes()); //meter tamaño de cada elemento
         cg.mul(arrayAccess.getType().suffix()); //mul
         cg.add(arrayAccess.getType().suffix()); //add
@@ -26,8 +29,11 @@ public class AddressCGVisitor extends AbstractCGVisitor {
 
     @Override
     public Object visit(FieldAccess fieldAccess, Object param) {
-        fieldAccess.getExpression().accept(this,param); //depende si es global o local
-        //cg.push();
+        //address[[expression]]
+        fieldAccess.getExpression().accept(this,param);
+        //push offset
+        cg.push(fieldAccess.getExpression().getType().getField(fieldAccess.getName()).getOffset());
+        //add
         cg.add(fieldAccess.getType().suffix());
         return null;
     }

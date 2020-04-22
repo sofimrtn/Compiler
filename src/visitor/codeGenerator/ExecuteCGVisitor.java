@@ -95,7 +95,12 @@ public class ExecuteCGVisitor extends AbstractCGVisitor {
 
     @Override
     public Object visit(FuncInvocation funcInvocation, Object param) {
-        //TODO proxima clase
+        //value[[(Expression)statement]()
+        funcInvocation.accept(value, param);
+        if(funcInvocation.getType() instanceof VoidType){
+            //pop<(Expression)statement.getType.suffix>
+            cg.pop(funcInvocation.getType().suffix());
+        }
         return null;
     }
 
@@ -112,7 +117,30 @@ public class ExecuteCGVisitor extends AbstractCGVisitor {
 
     @Override
     public Object visit(IfElse ifElse, Object param) {
-        //TODO proxima clase
+        // n=cg.getLabel(2)
+        int label = cg.generateLabels(2);
+        //valor[[expresion]]
+        ifElse.getCondition().accept(value,this);
+        //jz <label>n
+        cg.jz(label);
+
+        for(Statement s:ifElse.getIfStatements()){
+            //execute[[s]]
+            s.accept(this,param);
+        }
+        //jmp<label>n+1
+        cg.jmp(label+1);
+        //<label>n<:>
+        cg.writeLabel(label);
+
+        if(ifElse.getElseStatements() != null){
+            for(Statement s : ifElse.getElseStatements()){
+                //execute[[s1]]()
+                s.accept(this,param);
+            }
+        }
+        //<label>n+1<:>
+        cg.writeLabel(label + 1);
         return null;
     }
 
@@ -142,7 +170,7 @@ public class ExecuteCGVisitor extends AbstractCGVisitor {
             //valor[[ret.getExpression()]]
            ret.getExpression().accept(value,this);
         }
-        FuncDefinition func = (FuncDefinition) param;
+        FuncDefinition func = (FuncDefinition) param; //la definicion se pasa por parametro
         // RET{},{},{}
         cg.ret(((FuncType) func.getType()).numberOfBytes(),func.getSizeLocals() ,
                 ((FuncType) func.getType()).getSizeParams());
@@ -151,7 +179,22 @@ public class ExecuteCGVisitor extends AbstractCGVisitor {
 
     @Override
     public Object visit(While wh, Object param) {
-        //TODO proxima clase
+        int label = cg.generateLabels(2);
+        //<While>n<:>
+        cg.writeLabel(label);
+        //Value[[expresion]]
+        wh.getCondition().accept(value,this);
+        // Jz <fuerawhile>n
+        cg.jz(label + 1);
+        for(Statement s:wh.getStatements()){
+            //Execute[[statements_i]]
+            s.accept(this,param);
+        }
+        //Jmp <While>n
+        cg.jmp(label);
+        //<fuerawhile>n <:>
+        cg.writeLabel(label+1);
+
         return null;
     }
 }

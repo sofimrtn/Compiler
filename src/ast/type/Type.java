@@ -21,4 +21,5 @@ public interface Type extends ASTNode {
     Type squareBrackets(Type type);
     Type dot(String name);
     Type parenthesis(List<Expression> expressions);
+    RecordField getField(String name);
 }

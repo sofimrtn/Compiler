@@ -59,11 +59,12 @@ public class ValueCGVisitor extends AbstractCGVisitor {
 
     @Override
     public Object visit(FuncInvocation funcInvocation, Object param) {
-        //TODO proxima clase
-        //expresion
-        //value[[args_i]]
-        //call{nombre}
-        //si void, pop.
+        for(Expression e:funcInvocation.getExpressions()){
+            //value[[e]]
+            e.accept(this,param);
+        }
+        // call<expression.name>
+        cg.call(funcInvocation.getVar().getName());
         return null;
     }
 
@@ -75,7 +76,9 @@ public class ValueCGVisitor extends AbstractCGVisitor {
 
     @Override
     public Object visit(LogicOperator logicOperator, Object param) {
+        //value[[expression.getLeft]]
         logicOperator.getLeft().accept(this,param);
+        //value[[expression.getRight]]
         logicOperator.getRight().accept(this,param);
         cg.logical(logicOperator);
         return null;
@@ -83,6 +86,7 @@ public class ValueCGVisitor extends AbstractCGVisitor {
 
     @Override
     public Object visit(Negation negation, Object param) {
+        //value[[expression]]
         negation.getExpression().accept(this,param);
         cg.not();
         return null;
@@ -96,7 +100,13 @@ public class ValueCGVisitor extends AbstractCGVisitor {
 
     @Override
     public Object visit(UnaryMinus unaryMinus, Object param) {
-        return super.visit(unaryMinus, param);
+        //value[[expression]]
+        unaryMinus.getExpression().accept(this,param);
+        // push -1
+        cg.push(-1);
+        // mul
+        cg.mul(unaryMinus.getExpression().getType().suffix());
+        return null;
     }
 
     @Override

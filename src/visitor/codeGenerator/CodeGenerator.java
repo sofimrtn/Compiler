@@ -232,4 +232,37 @@ public class CodeGenerator {
             write.flush();
         }
     }
+
+    public void pop(String suffix) {
+        write.println("POP"+suffix);
+        write.flush();
+    }
+
+    private int labels;
+
+    public int generateLabels(int number){
+        int actual = labels;
+        labels += number;
+        return actual;
+    }
+
+    public void writeLabel(int n) {
+        write.println("Label" + n + ":");
+        write.flush();
+    }
+
+    public void jz(int i) {
+        write.println("JZ Label" + i);
+        write.flush();
+    }
+
+    public void jnz(int i) {
+        write.println("JNZ Label" + i);
+        write.flush();
+    }
+
+    public void jmp(int i) {
+        write.println("JMP Label" + i);
+        write.flush();
+    }
 }

@@ -80,4 +80,9 @@ public abstract class AbstractType extends AbstractASTNode implements Type {
     public <T, P> T accept(Visitor<T, P> visitor, P param) {
         return null;
     }
+
+    @Override
+    public RecordField getField(String name) {
+        return null;
+    }
 }

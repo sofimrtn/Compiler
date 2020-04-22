@@ -79,4 +79,6 @@ public class RecordField implements ASTNode {
     public void setOffset(int offset){
         this.offset = offset;
     }
+
+
 }
