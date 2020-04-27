@@ -53,11 +53,13 @@ public class FuncType extends AbstractType{
     public Type parenthesis(List<Expression> expressions){
         //se puede hacer uso del promotes.
         //recorrer ambas listas sincronizadamente si todos promotesTo -->> return type, sino, null.
-        for(int i=0; i<expressions.size(); i++){
-            if(expressions.get(i).getType().promotesTo(variables.get(i).getType()) != null){
-                return this.type;
+        if(expressions.size() == variables.size()){ //si el numero es el mismo
+            for(int i=0; i<expressions.size(); i++){
+                if(expressions.get(i).getType().promotesTo(variables.get(i).getType()) == null){
+                    return null;
+                }
             }
-            return null;
+            return type; //este se mueve aquí porque si haces el if al reves no funciona para voids.
         }
         return null;
     }

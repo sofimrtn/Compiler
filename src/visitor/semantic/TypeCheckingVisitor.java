@@ -6,6 +6,9 @@ import ast.statement.*;
 import ast.type.*;
 import visitor.AbstractVisitor;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class TypeCheckingVisitor extends AbstractVisitor<Object, Object> {
 
     @Override
@@ -88,16 +91,20 @@ public class TypeCheckingVisitor extends AbstractVisitor<Object, Object> {
     @Override
     public Object visit(FuncInvocation funcInvocation, Object param) {
         funcInvocation.getVar().accept(this,param);
-        for(Expression e : funcInvocation.getExpressions()){
-            e.accept(this,param);
+        List<Expression> expressions = new ArrayList<Expression>();
+        if(funcInvocation.getExpressions() != null){
+            for(Expression e : funcInvocation.getExpressions()){
+                e.accept(this,param);
+                expressions.add( e );
+            }
         }
-        funcInvocation.setLValue(false);
         //en el tipo del parametro de la funcion, comprobar si el tipo de los parametros es igual.
-        funcInvocation.setType(funcInvocation.getVar().getType().parenthesis(funcInvocation.getExpressions()));
+        funcInvocation.setType(funcInvocation.getVar().getType().parenthesis(expressions));
         if(funcInvocation.getType() == null){
             funcInvocation.setType(new ErrorType(funcInvocation, "Invocation not possible, incopatible" +
                     "type"));
         }
+        funcInvocation.setLValue(false);
         return null;
     }
 
