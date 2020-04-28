@@ -21,6 +21,11 @@ public class Return extends AbstractStatement{
     }
 
     @Override
+    public String toString() {
+        return "Return";
+    }
+
+    @Override
     public <T, P> T accept(Visitor<T, P> visitor, P param) {
         return visitor.visit(this,param);
     }

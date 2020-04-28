@@ -21,6 +21,11 @@ public class Print extends AbstractStatement{
     }
 
     @Override
+    public String toString() {
+        return "Print";
+    }
+
+    @Override
     public <T, P> T accept(Visitor<T, P> visitor, P param) {
         return visitor.visit(this,param);
     }

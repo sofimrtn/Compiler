@@ -45,4 +45,8 @@ public class Assignment extends AbstractStatement{
         return visitor.visit(this,param);
     }
 
+    @Override
+    public String toString() {
+        return "Assignment";
+    }
 }

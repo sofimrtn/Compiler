@@ -4,17 +4,17 @@ import ast.Program;
 import ast.definition.Definition;
 import ast.definition.FuncDefinition;
 import ast.definition.VarDefinition;
-import ast.expression.Expression;
 import ast.expression.FuncInvocation;
 import ast.statement.*;
 import ast.type.FuncType;
-import ast.type.Type;
 import ast.type.VoidType;
 
 public class ExecuteCGVisitor extends AbstractCGVisitor {
 
     private ValueCGVisitor value;
     private AddressCGVisitor address;
+
+    private String input;
 
     public ExecuteCGVisitor(CodeGenerator cg){
         super(cg);
@@ -25,13 +25,13 @@ public class ExecuteCGVisitor extends AbstractCGVisitor {
         this.value = new ValueCGVisitor(cg);
         this.address = new AddressCGVisitor(cg,value);
         value.setAddressVisitor(address);
+        this.input=input;
     }
 
     @Override
     public Object visit(Program program, Object param) {
 
-        cg.call("main"); //call main
-        cg.halt(); //halt
+        cg.printFileName(input);
         cg.lineBreak();
 
         for (Definition d : program.getDefinitions()) {
@@ -39,6 +39,13 @@ public class ExecuteCGVisitor extends AbstractCGVisitor {
                 d.accept( this, param );
             }
         }
+        cg.lineBreak();
+        cg.initialComment();
+
+        cg.call("main"); //call main
+        cg.halt(); //halt
+        cg.lineBreak();
+
         for (Definition d : program.getDefinitions()) {
             if (!(d instanceof VarDefinition)) {
                 d.accept( this, param );
@@ -50,12 +57,13 @@ public class ExecuteCGVisitor extends AbstractCGVisitor {
     @Override
     public Object visit(VarDefinition varDefinition, Object param) {
         cg.declareVars(varDefinition);
-        cg.lineBreak();
         return null;
     }
 
     @Override
     public Object visit(FuncDefinition funcDefinition, Object param) {
+        cg.printLine(funcDefinition.getLine());
+        cg.lineBreak();
         FuncType type =(FuncType) funcDefinition.getType(); //tipo de retorno
 
         //{nombre}:
@@ -72,17 +80,14 @@ public class ExecuteCGVisitor extends AbstractCGVisitor {
                 cg.declareVars((VarDefinition) s);
             }
         }
-        cg.lineBreak();
-
         //enter{tamLocales}
         cg.enter(funcDefinition.getSizeLocals());
 
-        cg.lineBreak();
         //execute[[sentencia_i]]
         for(Statement s : funcDefinition.getStatements()){
             if(!(s instanceof VarDefinition)){
                 s.accept(this, funcDefinition);
-                cg.lineBreak();
+                //cg.lineBreak();
             }
         }
 
@@ -95,6 +100,7 @@ public class ExecuteCGVisitor extends AbstractCGVisitor {
 
     @Override
     public Object visit(FuncInvocation funcInvocation, Object param) {
+        cg.header(funcInvocation.getLine(), funcInvocation.toString());
         //value[[(Expression)statement]()
         funcInvocation.accept(value, param);
         if(funcInvocation.getType() instanceof VoidType){
@@ -106,6 +112,7 @@ public class ExecuteCGVisitor extends AbstractCGVisitor {
 
     @Override
     public Object visit(Assignment assignment, Object param) {
+        cg.header(assignment.getLine(), assignment.toString());
         //address[[assignment.getLeft()]]
         assignment.getLeft().accept(address, param);
         //value[[assignment.getRight()]]
@@ -117,6 +124,11 @@ public class ExecuteCGVisitor extends AbstractCGVisitor {
 
     @Override
     public Object visit(IfElse ifElse, Object param) {
+        cg.header(ifElse.getLine(), ifElse.toString());
+
+        cg.lineBreak();
+        cg.printLine(ifElse.getLine());
+
         // n=cg.getLabel(2)
         int label = cg.generateLabels(2);
         //valor[[expresion]]
@@ -124,6 +136,7 @@ public class ExecuteCGVisitor extends AbstractCGVisitor {
         //jz <label>n
         cg.jz(label);
 
+        cg.commentIf();
         for(Statement s:ifElse.getIfStatements()){
             //execute[[s]]
             s.accept(this,param);
@@ -132,6 +145,8 @@ public class ExecuteCGVisitor extends AbstractCGVisitor {
         cg.jmp(label+1);
         //<label>n<:>
         cg.writeLabel(label);
+
+        cg.commentElse();
 
         if(ifElse.getElseStatements() != null){
             for(Statement s : ifElse.getElseStatements()){
@@ -146,6 +161,7 @@ public class ExecuteCGVisitor extends AbstractCGVisitor {
 
     @Override
     public Object visit(Input input, Object param) {
+        cg.header(input.getLine(), input.toString());
         //address[[input.getExpression()]]
         input.getExpression().accept(address, param);
         //<in>input.getExpression().getType().suffix()
@@ -157,6 +173,7 @@ public class ExecuteCGVisitor extends AbstractCGVisitor {
 
     @Override
     public Object visit(Print print, Object param) {
+        cg.header(print.getLine(), print.toString());
         //valor[[ret.getExpression()]]
         print.getExpression().accept(value,param);
         //<out>ret.getExpression().getType().suffix()
@@ -166,6 +183,7 @@ public class ExecuteCGVisitor extends AbstractCGVisitor {
 
     @Override
     public Object visit(Return ret, Object param) {
+        cg.header(ret.getLine(), ret.toString());
         if(ret.getExpression()!=null){
             //valor[[ret.getExpression()]]
            ret.getExpression().accept(value,this);
@@ -179,6 +197,11 @@ public class ExecuteCGVisitor extends AbstractCGVisitor {
 
     @Override
     public Object visit(While wh, Object param) {
+        cg.header(wh.getLine(), wh.toString());
+
+        cg.lineBreak();
+        cg.printLine(wh.getLine());
+
         int label = cg.generateLabels(2);
         //<While>n<:>
         cg.writeLabel(label);
@@ -186,6 +209,8 @@ public class ExecuteCGVisitor extends AbstractCGVisitor {
         wh.getCondition().accept(value,this);
         // Jz <fuerawhile>n
         cg.jz(label + 1);
+
+        cg.commentWhile();
         for(Statement s:wh.getStatements()){
             //Execute[[statements_i]]
             s.accept(this,param);

@@ -1,9 +1,7 @@
 package visitor.codeGenerator;
 
-
 import ast.definition.VarDefinition;
 import ast.expression.Arithmetic;
-import ast.expression.Cast;
 import ast.expression.Comparison;
 import ast.expression.LogicOperator;
 import ast.type.CharType;
@@ -28,22 +26,22 @@ public class CodeGenerator {
     }
 
     public void out(String suffix){
-        write.println("OUT" + suffix);
+        write.println("\tOUT" + suffix);
         write.flush();
     }
 
     public void load(String suffix){
-        write.println("LOAD" + suffix);
+        write.println("\tLOAD" + suffix);
         write.flush();
     }
 
     public void store(String suffix){
-        write.println("STORE" + suffix);
+        write.println("\tSTORE" + suffix);
         write.flush();
     }
 
     public void in(String suffix){
-        write.println("IN" + suffix);
+        write.println("\tIN" + suffix);
         write.flush();
     }
 
@@ -53,12 +51,17 @@ public class CodeGenerator {
     }
 
     public void call(String function){
-        write.println("CALL " + function);
-        write.flush();
+        if(function.equals("main")){
+            write.println("CALL " + function);
+            write.flush();
+        }else{
+            write.println("\tCALL " + function);
+            write.flush();
+        }
     }
 
     public void enter(int number){
-        write.println("ENTER " + number);
+        write.println("\tENTER " + number);
         write.flush();
     }
 
@@ -68,62 +71,62 @@ public class CodeGenerator {
     }
 
     public void pusha(int offset) {
-        write.println("PUSHA " + offset);
+        write.println("\tPUSHA " + offset);
         write.flush();
     }
 
     public void pushBP() {
-        write.println("PUSHA BP");
+        write.println("\tPUSHA BP");
         write.flush();
     }
 
     public void push(int offset) {
-        write.println("PUSHI " + offset);
+        write.println("\tPUSHI " + offset);
         write.flush();
     }
 
     public void push( double value ) {
-        write.println( "PUSHF " + value );
+        write.println("\tPUSHF " + value );
         write.flush();
     }
 
     public void push( char value ) {
-        write.println( "PUSHB " + (int) value );
+        write.println( "\tPUSHB " + (int) value );
         write.flush();
     }
 
     public void add(String suffix) {
-        write.println("ADD" + suffix);
+        write.println("\tADD" + suffix);
         write.flush();
     }
 
     public void mul(String suffix) {
-        write.println("MUL" + suffix);
+        write.println("\tMUL" + suffix);
         write.flush();
     }
 
     public void not() {
-        write.println( "NOT" );
+        write.println( "\tNOT" );
         write.flush();
     }
 
     public void ret(int type, int locals, int params){
-        write.println("RET "+ type + ", "+locals+", "+params);
+        write.println("\tRET "+ type + ", "+locals+", "+params);
         write.flush();
     }
 
     public void declareVars(VarDefinition v){
-        write.println("' * " + v.getType() + " " + v.getName() + " ( offset " + v.getOffset() + ")");
+        write.println("\t' * " + v.getType() + " " + v.getName() + " ( offset " + v.getOffset() + ")");
         write.flush();
     }
 
     public void commentParams(){
-        write.println("' * PARAMETERS");
+        write.println("\t' * PARAMETERS");
         write.flush();
     }
 
     public void commentLocalVars(){
-        write.println("' * LOCAL VARIABLES");
+        write.println("\t' * LOCAL VARIABLES");
         write.flush();
     }
 
@@ -135,23 +138,23 @@ public class CodeGenerator {
     public void arithmetic(Arithmetic arithmetic) {
         switch (arithmetic.getOperator()){
             case "+":
-                write.println("ADD" + arithmetic.getType().suffix());
+                write.println("\tADD" + arithmetic.getType().suffix());
                 write.flush();
                 break;
             case "-":
-                write.println("SUB" + arithmetic.getType().suffix());
+                write.println("\tSUB" + arithmetic.getType().suffix());
                 write.flush();
                 break;
             case "*":
-                write.println("MUL" + arithmetic.getType().suffix());
+                write.println("\tMUL" + arithmetic.getType().suffix());
                 write.flush();
                 break;
             case "/":
-                write.println("DIV" + arithmetic.getType().suffix());
+                write.println("\tDIV" + arithmetic.getType().suffix());
                 write.flush();
                 break;
             case "%":
-                write.println("MOD" + arithmetic.getType().suffix());
+                write.println("\tMOD" + arithmetic.getType().suffix());
                 write.flush();
                 break;
         }
@@ -160,27 +163,27 @@ public class CodeGenerator {
     public void comparison(Comparison comparison) {
         switch (comparison.getOperator()){
             case ">":
-                write.println("GT" + comparison.getType().suffix());
+                write.println("\tGT" + comparison.getType().suffix());
                 write.flush();
                 break;
             case "<":
-                write.println("LT" + comparison.getType().suffix());
+                write.println("\tLT" + comparison.getType().suffix());
                 write.flush();
                 break;
             case ">=":
-                write.println("GE" + comparison.getType().suffix());
+                write.println("\tGE" + comparison.getType().suffix());
                 write.flush();
                 break;
             case "<=":
-                write.println("LE" + comparison.getType().suffix());
+                write.println("\tLE" + comparison.getType().suffix());
                 write.flush();
                 break;
             case "==":
-                write.println("EQ" + comparison.getType().suffix());
+                write.println("\tEQ" + comparison.getType().suffix());
                 write.flush();
                 break;
             case "!=":
-                write.println("NE" + comparison.getType().suffix());
+                write.println("\tNE" + comparison.getType().suffix());
                 write.flush();
                 break;
         }
@@ -189,11 +192,11 @@ public class CodeGenerator {
     public void logical(LogicOperator logicOperator) {
         switch (logicOperator.getOperator()){
             case "&&":
-                write.println("AND");
+                write.println("\tAND");
                 write.flush();
                 break;
             case "||":
-                write.println("OR");
+                write.println("\tOR");
                 write.flush();
                 break;
         }
@@ -201,40 +204,40 @@ public class CodeGenerator {
 
     public void cast(Type type, Type castType) {
         if (type instanceof CharType && castType instanceof IntType) {
-            write.println( "B2I" );
+            write.println( "\tB2I" );
             write.flush();
         }
 
         if (type instanceof IntType && castType instanceof DoubleType) {
-            write.println( "I2F" );
+            write.println( "\tI2F" );
             write.flush();
         }
 
         if (type instanceof DoubleType && castType instanceof IntType) {
-            write.println( "F2I" );
+            write.println( "\tF2I" );
             write.flush();
         }
 
         if (type instanceof IntType && castType instanceof CharType) {
-            write.println( "I2B" );
+            write.println( "\tI2B" );
             write.flush();
         }
 
         if (type instanceof CharType && castType instanceof DoubleType) {
-            write.println( "B2I" );
-            write.println( "I2F" );
+            write.println( "\tB2I" );
+            write.println( "\tI2F" );
             write.flush();
         }
 
         if (type instanceof DoubleType && castType instanceof CharType) {
-            write.println( "F2I" );
-            write.println( "I2B" );
+            write.println( "\tF2I" );
+            write.println( "\tI2B" );
             write.flush();
         }
     }
 
     public void pop(String suffix) {
-        write.println("POP"+suffix);
+        write.println("\tPOP"+suffix);
         write.flush();
     }
 
@@ -252,17 +255,58 @@ public class CodeGenerator {
     }
 
     public void jz(int i) {
-        write.println("JZ Label" + i);
+        write.println("\tJZ Label" + i);
         write.flush();
     }
 
     public void jnz(int i) {
-        write.println("JNZ Label" + i);
+        write.println("\tJNZ Label" + i);
         write.flush();
     }
 
     public void jmp(int i) {
-        write.println("JMP Label" + i);
+        write.println("\tJMP Label" + i);
         write.flush();
+    }
+
+    public void printLine(int line){
+        write.println("#line "+ line);
+        write.flush();
+    }
+
+    public void printName(String name){
+        write.println("\t' *"+ name + ": ");
+        write.flush();
+    }
+
+    public void printFileName(String input){
+        write.println("#source \"" + input + "\"");
+        write.flush();
+    }
+
+    public void initialComment(){
+        write.println("' * Invocation to the main function");
+        write.flush();
+    }
+
+    public void commentIf() {
+        write.println("\t' * if body");
+        write.flush();
+    }
+
+    public void commentWhile() {
+        write.println("\t' * while body");
+        write.flush();
+    }
+
+    public void commentElse() {
+        write.println("\t' * else body");
+        write.flush();
+    }
+
+    public void header(int line, String name){
+        lineBreak();
+        printLine(line);
+        printName(name);
     }
 }

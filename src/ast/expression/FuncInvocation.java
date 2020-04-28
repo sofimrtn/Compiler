@@ -26,6 +26,11 @@ public class FuncInvocation extends AbstractExpression implements Statement {
     }
 
     @Override
+    public String toString() {
+        return "FuncInvocation";
+    }
+
+    @Override
     public <T, P> T accept(Visitor<T, P> visitor, P param) {
         return visitor.visit(this,param);
     }

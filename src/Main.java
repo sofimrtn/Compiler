@@ -41,7 +41,7 @@ public class Main {
 			// * The AST is shown
 			IntrospectorModel model=new IntrospectorModel("Program", ast);
 			new IntrospectorTree("Introspector", model);
-			ast.accept(new ExecuteCGVisitor("input.txt","output.txt"),null);
+			ast.accept(new ExecuteCGVisitor(args[0],args[1]),null);
 		}
 	}
 }
