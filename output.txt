@@ -1,21 +1,24 @@
-#source "big.input.txt"
+#source "input.2.txt"
 
-	' * RecordType pair ( offset 0)
-	' * ArrayType acme ( offset 3)
-	' * ArrayType fibonacci ( offset 11)
+	' * IntType i ( offset 0)
+	' * IntType n ( offset 2)
+	' * IntType j ( offset 4)
+	' * CharType c ( offset 6)
+	' * RecordType pair ( offset 7)
+	' * ArrayType matrix ( offset 10)
 
 ' * Invocation to the main function
 CALL main
 HALT
 
-#line 14
+#line 11
 
 p:
 	' * PARAMETERS
 	' * LOCAL VARIABLES
 	ENTER 0
 	RET 0, 0, 0
-#line 16
+#line 13
 
 f:
 	' * PARAMETERS
@@ -24,146 +27,173 @@ f:
 	' * LOCAL VARIABLES
 	' * DoubleType real ( offset -4)
 	' * CharType c ( offset -5)
-	' * IntType result ( offset -7)
-	ENTER 7
+	ENTER 5
 
-#line 20
+#line 16
 	' *Assignment: 
-	PUSHA BP
+	PUSH BP
 	PUSHI -4
+	ADDi
+	PUSHA 7
+	PUSHI 2
+	ADDi
+	LOADb
+	B2I
+	I2F
+	PUSHA 7
+	PUSHI 0
+	ADDi
+	LOADi
+	I2F
 	ADDf
-	PUSHA BP
+	PUSH BP
 	PUSHI 6
-	ADDf
+	ADDi
 	LOADf
-	PUSHF 10.0
-	MULf
+	ADDf
+	PUSH BP
+	PUSHI 4
+	ADDi
+	LOADi
+	I2F
+	ADDf
 	STOREf
 
-#line 21
+#line 17
 	' *Assignment: 
-	PUSHA BP
+	PUSH BP
 	PUSHI -5
-	ADDb
+	ADDi
 	PUSHB 48
 	STOREb
 
-#line 22
-	' *IfElse: 
-
-#line 22
-	PUSHA BP
-	PUSHI 4
-	ADDi
-	LOADi
-	PUSHI 256
-	LTi
-	JZ Label0
-	' * if body
-
-#line 23
-	' *Assignment: 
-	PUSHA BP
+#line 18
+	' *Return: 
+	PUSH BP
 	PUSHI -5
-	ADDb
-	PUSHA BP
-	PUSHI 4
 	ADDi
-	LOADi
-	I2B
-	STOREb
-
-#line 24
-	' *Assignment: 
-	PUSHA BP
-	PUSHI -7
-	ADDi
-	PUSHA BP
-	PUSHI -5
-	ADDb
 	LOADb
 	B2I
-	STOREi
-	JMP Label1
-Label0:
-	' * else body
+	RET 2, 5, 6
+#line 23
 
-#line 27
+fill:
+	' * PARAMETERS
+	' * IntType row ( offset 8)
+	' * IntType value ( offset 6)
+	' * IntType increment ( offset 4)
+	' * LOCAL VARIABLES
+	' * IntType i ( offset -2)
+	' * IntType inc ( offset -4)
+	ENTER 4
+
+#line 25
 	' *Assignment: 
-	PUSHA BP
-	PUSHI -7
+	PUSH BP
+	PUSHI -2
 	ADDi
-	PUSHA BP
-	PUSHI -4
-	ADDf
-	LOADf
-	F2I
+	PUSHI 0
 	STOREi
-Label1:
 
-#line 28
-	' *Return: 
-	PUSHA BP
-	PUSHI -7
+#line 26
+	' *Assignment: 
+	PUSH BP
+	PUSHI -4
+	ADDi
+	PUSH BP
+	PUSHI 4
 	ADDi
 	LOADi
-	RET 2, 7, 10
-#line 31
+	STOREi
 
-initialize:
+#line 27
+	' *While: 
+
+#line 27
+Label0:
+	PUSH BP
+	PUSHI -2
+	ADDi
+	LOADi
+	PUSHI 10
+	LTi
+	JZ Label1
+	' * while body
+
+#line 28
+	' *Assignment: 
+	PUSHA 10
+	PUSH BP
+	PUSHI 8
+	ADDi
+	LOADi
+	PUSHI 20
+	MULi
+	ADDi
+	PUSH BP
+	PUSHI -2
+	ADDi
+	LOADi
+	PUSHI 2
+	MULi
+	ADDi
+	PUSH BP
+	PUSHI 6
+	ADDi
+	LOADi
+	PUSH BP
+	PUSHI -4
+	ADDi
+	LOADi
+	ADDi
+	STOREi
+
+#line 29
+	' *Assignment: 
+	PUSH BP
+	PUSHI -2
+	ADDi
+	PUSH BP
+	PUSHI -2
+	ADDi
+	LOADi
+	PUSHI 1
+	ADDi
+	STOREi
+
+#line 30
+	' *Assignment: 
+	PUSH BP
+	PUSHI -4
+	ADDi
+	PUSH BP
+	PUSHI -4
+	ADDi
+	LOADi
+	PUSH BP
+	PUSHI 4
+	ADDi
+	LOADi
+	ADDi
+	STOREi
+	JMP Label0
+Label1:
+	RET 0, 4, 6
+#line 34
+
+show:
 	' * PARAMETERS
+	' * IntType row ( offset 4)
 	' * LOCAL VARIABLES
 	' * IntType i ( offset -2)
 	ENTER 2
 
-#line 33
-	' *Assignment: 
-	PUSHA 11
-	PUSHI 0
-	PUSHI 6
-	MUL
-	ADD
-	PUSHI 0
-	PUSHI 2
-	MULi
-	ADDi
-	PUSHI 0
-	STOREi
-
-#line 34
-	' *Assignment: 
-	PUSHA 11
-	PUSHI 0
-	PUSHI 6
-	MUL
-	ADD
-	PUSHI 1
-	PUSHI 2
-	MULi
-	ADDi
-	PUSHI 1
-	STOREi
-
-#line 35
-	' *Assignment: 
-	PUSHA 11
-	PUSHI 0
-	PUSHI 6
-	MUL
-	ADD
-	PUSHI 2
-	PUSHI 2
-	MULi
-	ADDi
-	PUSHI 1
-	STOREi
-
 #line 36
 	' *Assignment: 
-	PUSHA BP
+	PUSH BP
 	PUSHI -2
 	ADDi
-	PUSHI 1
+	PUSHI 0
 	STOREi
 
 #line 37
@@ -171,126 +201,82 @@ initialize:
 
 #line 37
 Label2:
-	PUSHA BP
+	PUSH BP
 	PUSHI -2
 	ADDi
 	LOADi
-	PUSHI 8
+	PUSHI 10
 	LTi
 	JZ Label3
 	' * while body
 
 #line 38
-	' *Assignment: 
-	PUSHA 11
-	PUSHA BP
+	' *Print: 
+	PUSHB 40
+	OUTb
+
+#line 38
+	' *Print: 
+	PUSH BP
+	PUSHI 4
+	ADDi
+	LOADi
+	OUTi
+
+#line 38
+	' *Print: 
+	PUSHB 44
+	OUTb
+
+#line 38
+	' *Print: 
+	PUSH BP
 	PUSHI -2
 	ADDi
 	LOADi
-	PUSHI 6
-	MUL
-	ADD
-	PUSHI 0
-	PUSHI 2
+	OUTi
+
+#line 38
+	' *Print: 
+	PUSHB 41
+	OUTb
+
+#line 38
+	' *Print: 
+	PUSHB 58
+	OUTb
+
+#line 38
+	' *Print: 
+	PUSHA 10
+	PUSH BP
+	PUSHI 4
+	ADDi
+	LOADi
+	PUSHI 20
 	MULi
 	ADDi
-	PUSHA 11
-	PUSHA BP
+	PUSH BP
 	PUSHI -2
 	ADDi
 	LOADi
-	PUSHI 1
-	SUBi
-	PUSHI 6
-	MUL
-	ADD
-	PUSHI 1
 	PUSHI 2
 	MULi
 	ADDi
 	LOADi
-	STOREi
+	OUTi
+
+#line 38
+	' *Print: 
+	PUSHB 32
+	OUTb
 
 #line 39
 	' *Assignment: 
-	PUSHA 11
-	PUSHA BP
+	PUSH BP
 	PUSHI -2
 	ADDi
-	LOADi
-	PUSHI 6
-	MUL
-	ADD
-	PUSHI 1
-	PUSHI 2
-	MULi
-	ADDi
-	PUSHA 11
-	PUSHA BP
-	PUSHI -2
-	ADDi
-	LOADi
-	PUSHI 1
-	SUBi
-	PUSHI 6
-	MUL
-	ADD
-	PUSHI 2
-	PUSHI 2
-	MULi
-	ADDi
-	LOADi
-	STOREi
-
-#line 40
-	' *Assignment: 
-	PUSHA 11
-	PUSHA BP
-	PUSHI -2
-	ADDi
-	LOADi
-	PUSHI 6
-	MUL
-	ADD
-	PUSHI 2
-	PUSHI 2
-	MULi
-	ADDi
-	PUSHA 11
-	PUSHA BP
-	PUSHI -2
-	ADDi
-	LOADi
-	PUSHI 6
-	MUL
-	ADD
-	PUSHI 0
-	PUSHI 2
-	MULi
-	ADDi
-	LOADi
-	PUSHA 11
-	PUSHA BP
-	PUSHI -2
-	ADDi
-	LOADi
-	PUSHI 6
-	MUL
-	ADD
-	PUSHI 1
-	PUSHI 2
-	MULi
-	ADDi
-	LOADi
-	ADDi
-	STOREi
-
-#line 41
-	' *Assignment: 
-	PUSHA BP
-	PUSHI -2
-	ADDi
-	PUSHA BP
+	PUSH BP
 	PUSHI -2
 	ADDi
 	LOADi
@@ -299,447 +285,146 @@ Label2:
 	STOREi
 	JMP Label2
 Label3:
-	RET 0, 2, 0
-#line 47
+
+#line 41
+	' *Print: 
+	PUSHB 10
+	OUTb
+	RET 0, 2, 2
+#line 45
 
 main:
 	' * PARAMETERS
 	' * LOCAL VARIABLES
 	' * IntType i ( offset -2)
-	' * IntType j ( offset -4)
-	ENTER 4
+	ENTER 2
 
-#line 49
+#line 48
 	' *FuncInvocation: 
 	CALL p
-	POP
 
-#line 50
+#line 49
 	' *Assignment: 
-	PUSHA BP
+	PUSH BP
 	PUSHI -2
 	ADDi
 	PUSHI 0
 	STOREi
 
-#line 51
+#line 50
 	' *Assignment: 
-	PUSHA 0
+	PUSHA 7
 	PUSHI 2
-	ADDb
+	ADDi
 	PUSHB 48
 	STOREb
 
-#line 52
+#line 51
 	' *Assignment: 
-	PUSHA 0
+	PUSHA 7
 	PUSHI 0
 	ADDi
 	PUSHB 48
 	B2I
 	STOREi
 
-#line 55
+#line 52
 	' *Print: 
-	PUSHA BP
+	PUSH BP
 	PUSHI -2
 	ADDi
 	LOADi
 	I2F
-	PUSHA 0
+	PUSHA 7
 	PUSHI 2
-	ADDb
+	ADDi
 	LOADb
 	B2I
 	CALL f
 	OUTi
 
-#line 55
+#line 52
 	' *Print: 
 	PUSHB 10
 	OUTb
 
-#line 56
+#line 54
 	' *FuncInvocation: 
 	PUSHF 1.3
 	PUSHI 2
 	CALL f
+	POPi
 
-#line 58
-	' *FuncInvocation: 
-	CALL initialize
-	POP
-
-#line 59
+#line 56
 	' *Assignment: 
-	PUSHA BP
+	PUSH BP
 	PUSHI -2
 	ADDi
 	PUSHI 0
 	STOREi
 
-#line 60
+#line 57
+	' *Assignment: 
+	PUSHA 4
+	PUSHI 0
+	STOREi
+
+#line 58
 	' *While: 
 
-#line 60
+#line 58
 Label4:
-	PUSHA BP
+	PUSH BP
 	PUSHI -2
 	ADDi
 	LOADi
-	PUSHI 8
+	PUSHI 10
 	LTi
 	JZ Label5
 	' * while body
 
-#line 62
-	' *Print: 
-	PUSHB 40
-	OUTb
-
-#line 62
-	' *Print: 
-	PUSHA BP
+#line 59
+	' *FuncInvocation: 
+	PUSH BP
 	PUSHI -2
 	ADDi
+	LOADi
+	PUSHA 4
 	LOADi
 	PUSHI 1
-	ADDi
-	OUTi
+	CALL fill
 
-#line 62
-	' *Print: 
-	PUSHB 41
-	OUTb
-
-#line 62
-	' *Print: 
-	PUSHA 11
-	PUSHA BP
+#line 60
+	' *FuncInvocation: 
+	PUSH BP
 	PUSHI -2
 	ADDi
 	LOADi
-	PUSHI 6
-	MUL
-	ADD
-	PUSHI 0
-	PUSHI 2
-	MULi
-	ADDi
-	LOADi
-	OUTi
+	CALL show
 
-#line 62
-	' *Print: 
-	PUSHB 43
-	OUTb
-
-#line 62
-	' *Print: 
-	PUSHA 11
-	PUSHA BP
-	PUSHI -2
-	ADDi
-	LOADi
-	PUSHI 6
-	MUL
-	ADD
-	PUSHI 1
-	PUSHI 2
-	MULi
-	ADDi
-	LOADi
-	OUTi
-
-#line 62
-	' *Print: 
-	PUSHB 61
-	OUTb
-
-#line 62
-	' *Print: 
-	PUSHA 11
-	PUSHA BP
-	PUSHI -2
-	ADDi
-	LOADi
-	PUSHI 6
-	MUL
-	ADD
-	PUSHI 2
-	PUSHI 2
-	MULi
-	ADDi
-	LOADi
-	OUTi
-
-#line 62
-	' *Print: 
-	PUSHB 10
-	OUTb
-
-#line 65
+#line 61
 	' *Assignment: 
-	PUSHA BP
+	PUSH BP
 	PUSHI -2
 	ADDi
-	PUSHA BP
+	PUSH BP
 	PUSHI -2
 	ADDi
 	LOADi
 	PUSHI 1
 	ADDi
+	STOREi
+
+#line 62
+	' *Assignment: 
+	PUSHA 4
+	PUSH BP
+	PUSHI -2
+	ADDi
+	LOADi
+	PUSHI 10
+	MULi
 	STOREi
 	JMP Label4
 Label5:
-
-#line 68
-	' *Assignment: 
-	PUSHA 3
-	PUSHI 1
-	PUSHI 4
-	MUL
-	ADD
-	PUSHI 0
-	ADD
-	PUSHI 1
-	PUSHI 2
-	MUL
-	ADD
-	PUSHI 0
-	ADDi
-	PUSHI 56
-	STOREi
-
-#line 70
-	' *Print: 
-	PUSHA 3
-	PUSHI 1
-	PUSHI 4
-	MUL
-	ADD
-	PUSHI 0
-	ADD
-	PUSHI 1
-	PUSHI 2
-	MUL
-	ADD
-	PUSHI 0
-	ADDi
-	LOADi
-	OUTi
-
-#line 70
-	' *Print: 
-	PUSHB 10
-	OUTb
-
-#line 71
-	' *Assignment: 
-	PUSHA BP
-	PUSHI -2
-	ADDi
-	PUSHI 0
-	STOREi
-
-#line 72
-	' *While: 
-
-#line 72
-Label6:
-	PUSHA BP
-	PUSHI -2
-	ADDi
-	LOADi
-	PUSHI 2
-	LTi
-	JZ Label7
-	' * while body
-
-#line 73
-	' *Assignment: 
-	PUSHA BP
-	PUSHI -4
-	ADDi
-	PUSHI 0
-	STOREi
-
-#line 74
-	' *While: 
-
-#line 74
-Label8:
-	PUSHA BP
-	PUSHI -4
-	ADDi
-	LOADi
-	PUSHI 2
-	LTi
-	JZ Label9
-	' * while body
-
-#line 75
-	' *Assignment: 
-	PUSHA 3
-	PUSHA BP
-	PUSHI -2
-	ADDi
-	LOADi
-	PUSHI 4
-	MUL
-	ADD
-	PUSHI 0
-	ADD
-	PUSHA BP
-	PUSHI -4
-	ADDi
-	LOADi
-	PUSHI 2
-	MUL
-	ADD
-	PUSHI 0
-	ADDi
-	PUSHA BP
-	PUSHI -2
-	ADDi
-	LOADi
-	PUSHA BP
-	PUSHI -4
-	ADDi
-	LOADi
-	ADDi
-	STOREi
-
-#line 76
-	' *Assignment: 
-	PUSHA BP
-	PUSHI -4
-	ADDi
-	PUSHA BP
-	PUSHI -4
-	ADDi
-	LOADi
-	PUSHI 1
-	ADDi
-	STOREi
-	JMP Label8
-Label9:
-
-#line 78
-	' *Assignment: 
-	PUSHA BP
-	PUSHI -2
-	ADDi
-	PUSHA BP
-	PUSHI -2
-	ADDi
-	LOADi
-	PUSHI 1
-	ADDi
-	STOREi
-	JMP Label6
-Label7:
-
-#line 81
-	' *Assignment: 
-	PUSHA BP
-	PUSHI -2
-	ADDi
-	PUSHI 0
-	STOREi
-
-#line 82
-	' *While: 
-
-#line 82
-Label10:
-	PUSHA BP
-	PUSHI -2
-	ADDi
-	LOADi
-	PUSHI 2
-	LTi
-	JZ Label11
-	' * while body
-
-#line 83
-	' *Assignment: 
-	PUSHA BP
-	PUSHI -4
-	ADDi
-	PUSHI 0
-	STOREi
-
-#line 84
-	' *While: 
-
-#line 84
-Label12:
-	PUSHA BP
-	PUSHI -4
-	ADDi
-	LOADi
-	PUSHI 2
-	LTi
-	JZ Label13
-	' * while body
-
-#line 86
-	' *Print: 
-	PUSHA 3
-	PUSHA BP
-	PUSHI -2
-	ADDi
-	LOADi
-	PUSHI 4
-	MUL
-	ADD
-	PUSHI 0
-	ADD
-	PUSHA BP
-	PUSHI -4
-	ADDi
-	LOADi
-	PUSHI 2
-	MUL
-	ADD
-	PUSHI 0
-	ADDi
-	LOADi
-	OUTi
-
-#line 86
-	' *Print: 
-	PUSHB 32
-	OUTb
-
-#line 87
-	' *Assignment: 
-	PUSHA BP
-	PUSHI -4
-	ADDi
-	PUSHA BP
-	PUSHI -4
-	ADDi
-	LOADi
-	PUSHI 1
-	ADDi
-	STOREi
-	JMP Label12
-Label13:
-
-#line 89
-	' *Assignment: 
-	PUSHA BP
-	PUSHI -2
-	ADDi
-	PUSHA BP
-	PUSHI -2
-	ADDi
-	LOADi
-	PUSHI 1
-	ADDi
-	STOREi
-	JMP Label10
-Label11:
-	RET 0, 4, 0
+	RET 0, 2, 0

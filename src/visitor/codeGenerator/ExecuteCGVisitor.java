@@ -103,7 +103,7 @@ public class ExecuteCGVisitor extends AbstractCGVisitor {
         cg.header(funcInvocation.getLine(), funcInvocation.toString());
         //value[[(Expression)statement]()
         funcInvocation.accept(value, param);
-        if(funcInvocation.getType() instanceof VoidType){
+        if(!(funcInvocation.getType() instanceof VoidType)){
             //pop<(Expression)statement.getType.suffix>
             cg.pop(funcInvocation.getType().suffix());
         }

@@ -76,7 +76,7 @@ public class CodeGenerator {
     }
 
     public void pushBP() {
-        write.println("\tPUSHA BP");
+        write.println("\tPUSH BP");
         write.flush();
     }
 

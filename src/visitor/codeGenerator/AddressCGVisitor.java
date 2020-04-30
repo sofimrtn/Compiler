@@ -4,6 +4,7 @@ import ast.definition.VarDefinition;
 import ast.expression.ArrayAccess;
 import ast.expression.FieldAccess;
 import ast.expression.Variable;
+import ast.type.IntType;
 
 public class AddressCGVisitor extends AbstractCGVisitor {
 
@@ -22,8 +23,8 @@ public class AddressCGVisitor extends AbstractCGVisitor {
         arrayAccess.getRight().accept(value, param); //meter en pila VALOR del indice
         //push size
         cg.push(arrayAccess.getType().numberOfBytes()); //meter tamaño de cada elemento
-        cg.mul(arrayAccess.getType().suffix()); //mul
-        cg.add(arrayAccess.getType().suffix()); //add
+        cg.mul(IntType.getInstance().suffix()); //mul
+        cg.add(IntType.getInstance().suffix()); //add
         return null;
     }
 
@@ -34,7 +35,7 @@ public class AddressCGVisitor extends AbstractCGVisitor {
         //push offset
         cg.push(fieldAccess.getExpression().getType().getField(fieldAccess.getName()).getOffset());
         //add
-        cg.add(fieldAccess.getType().suffix());
+        cg.add(IntType.getInstance().suffix());
         return null;
     }
 
@@ -46,7 +47,7 @@ public class AddressCGVisitor extends AbstractCGVisitor {
         } else {
             cg.pushBP();
             cg.push(var.getOffset());
-            cg.add(var.getType().suffix());
+            cg.add(IntType.getInstance().suffix());
         }
         return null;
     }

@@ -36,7 +36,15 @@ public class FuncType extends AbstractType{
     public int getSizeParams(){
         int size = 0;
         for(VarDefinition var:variables){
-            size+=var.getOffset();
+            if(var.getType() instanceof IntType) {
+                size+=2;
+            }
+            if(var.getType() instanceof DoubleType) {
+                size+=4;
+            }
+            if(var.getType() instanceof CharType) {
+                size+=1;
+            }
         }
         return size;
     }
